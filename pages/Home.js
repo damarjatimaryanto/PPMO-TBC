@@ -1,0 +1,153 @@
+import 'react-native-gesture-handler';
+import React, {Component} from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+  Image,
+  BackHandler,
+  Alert,
+  StatusBar,
+} from 'react-native';
+const COLORS = {primary: '#282534', header: '#FFFFFF'};
+class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.selamat}>Selamat Pagi, </Text>
+          <Text style={styles.nama}>Damarjati Maryanto</Text>
+        </View>
+        <View style={styles.menu}>
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              // backgroundColor: 'grey',
+            }}>
+            <View
+              style={{
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                width: '100%',
+              }}>
+              <View style={styles.kotakmenu}>
+                <TouchableOpacity style={styles.tombol1}>
+                  <Image
+                    style={styles.menuicon}
+                    source={require('./../assets/img/icon/track_record.png')}></Image>
+                </TouchableOpacity>
+                <Text style={styles.tombol_text}>Track Record</Text>
+              </View>
+              <View style={styles.kotakmenu}>
+                <TouchableOpacity style={styles.tombol2}>
+                  <Image
+                    style={styles.menuicon}
+                    source={require('./../assets/img/icon/kategori.png')}></Image>
+                </TouchableOpacity>
+                <Text style={styles.tombol_text}>Kategori usia</Text>
+              </View>
+              <View style={styles.kotakmenu}>
+                <TouchableOpacity style={styles.tombol1}></TouchableOpacity>
+                <Text style={styles.tombol_text}>Fase</Text>
+              </View>
+              <View style={styles.kotakmenu}>
+                <TouchableOpacity style={styles.tombol1}></TouchableOpacity>
+                <Text style={styles.tombol_text}>Alarm</Text>
+              </View>
+            </View>
+          </View>
+          {/* <TouchableOpacity style={styles.tombol1}></TouchableOpacity>
+          <Text>Track Record</Text> */}
+        </View>
+      </View>
+    );
+  }
+}
+
+export default Home;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    // justifyContent: 'center',
+  },
+  header: {
+    // backgroundColor: 'grey',
+    marginHorizontal: '2%',
+    height: '25%',
+    justifyContent: 'center',
+  },
+  selamat: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#25376A',
+  },
+  nama: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#25376A',
+    fontFamily: 'Poppins',
+  },
+  menu: {
+    // backgroundColor: 'blue',
+    // height: '20%',
+    // flexDirection: 'row',
+    // flexWrap: 'wrap',
+    marginHorizontal: '5%',
+    // justifyContent: 'space-between',
+  },
+  kotakmenu: {
+    // backgroundColor: 'grey',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  tombol1: {
+    borderRadius: 10,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#25376A',
+    shadowColor: '#171717',
+    // shadowOffset: {width: 0, height: 3},
+    // shadowOpacity: 0.6,
+    // shadowRadius: 5,
+    // elevation: 8,
+  },
+  tombol2: {
+    borderRadius: 10,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 2,
+    borderColor: '#25376A',
+    shadowColor: '#171717',
+    // shadowOffset: {width: 0, height: 3},
+    // shadowOpacity: 0.6,
+    // shadowRadius: 5,
+    // elevation: 8,
+  },
+  tombol_text: {
+    textAlign: 'center',
+    // top: 10,
+    // fontWeight: '500',
+    fontSize: 13,
+    color: '#25376A',
+  },
+  menuicon: {
+    width: '70%',
+    height: '70%',
+  },
+});
