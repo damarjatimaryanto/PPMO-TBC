@@ -14,6 +14,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNSettings from 'react-native-settings';
 import {TextInput} from 'react-native-gesture-handler';
 
+import SelectDropdown from 'react-native-select-dropdown';
+
+const countries = ['Fase Pertama (Ke 1)', 'Fase Kedua ( Ke 2)'];
+const kategori = ['Anak-anak', 'Remaja', 'Dewasa'];
+
 const blue = '#0D4AA7';
 const black = '#3d3d3d';
 const red = '#C74B4C';
@@ -21,7 +26,7 @@ const grey = '#5C5F68';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
-const COLORS = {primary: '#282534', white: '#fff'};
+const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -29,14 +34,12 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <View style={styles.imgContainer}>
         <Image
-          style={{width: width * 0.21, height: height * 0.1}}
-          source={require('../assets/img/icon/logo_biru.png')}
+          style={{width: 90, height: 73}}
+          source={require('../assets/img/icon/logoobat_biru.png')}
         />
       </View>
 
       <View style={styles.formContainer}>
-        <Text style={styles.h1}>Pastikan Data yang diinputkan benar</Text>
-
         <View style={styles.inputContainer}>
           <Text style={styles.h2}>Nama Lengkap</Text>
 
@@ -45,24 +48,59 @@ const LoginScreen = () => {
             placeholderTextColor={grey}
             placeholder="Masukkan Nama Lengkap Anda"></TextInput>
         </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Kategori usia</Text>
 
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            placeholderTextColor={grey}
-            placeholder="Masukkan Password Anda"></TextInput>
-        </View>
         <View style={styles.inputContainer}>
           <Text style={styles.h2}>Fase Pengobatan</Text>
-
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            placeholderTextColor={grey}
-            placeholder="Masukkan Password Anda"></TextInput>
+          <SelectDropdown
+            data={countries}
+            onSelect={(selectedItem, index) => {
+              console.log(selectedItem, index);
+            }}
+            defaultButtonText={'Pilih fase pengobatan'}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              // text represented after item is selected
+              // if data array is an array of objects then return selectedItem.property to render after item is selected
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              // text represented for each item in dropdown
+              // if data array is an array of objects then return item.property to represent item in dropdown
+              return item;
+            }}
+            buttonStyle={styles.inputselect}
+            buttonTextStyle={styles.inputTextselect}
+            dropdownStyle={styles.dropdownStyle}
+            rowStyle={styles.rowstyle}
+            rowTextStyle={styles.rowtext}
+          />
         </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.h2}>Kategori Usia</Text>
+          <SelectDropdown
+            data={kategori}
+            onSelect={(selectedItem, index) => {
+              console.log(selectedItem, index);
+            }}
+            defaultButtonText={'Pilih Kategori Usia'}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              // text represented after item is selected
+              // if data array is an array of objects then return selectedItem.property to render after item is selected
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              // text represented for each item in dropdown
+              // if data array is an array of objects then return item.property to represent item in dropdown
+              return item;
+            }}
+            buttonStyle={styles.inputselect}
+            buttonTextStyle={styles.inputTextselect}
+            dropdownStyle={styles.dropdownStyle}
+            rowStyle={styles.rowstyle}
+            rowTextStyle={styles.rowtext}
+          />
+        </View>
+
         <View style={styles.btn_Container}>
           <TouchableOpacity
             style={styles.submitBtn}
@@ -86,7 +124,7 @@ const styles = StyleSheet.create({
   imgContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: '20%',
   },
   formContainer: {
     paddingHorizontal: width * 0.055,
@@ -106,20 +144,49 @@ const styles = StyleSheet.create({
   },
   h2: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#25376A',
+    color: COLORS.primary,
+    fontFamily: 'Poppins-SemiBold',
   },
   input: {
     borderWidth: 2,
-    borderColor: '#25376A',
+    borderColor: COLORS.primary,
     paddingVertical: width * 0.013,
-    paddingHorizontal: width * 0.03,
+    paddingHorizontal: width * 0.04,
+    height: 45,
     borderRadius: 5,
-    marginTop: 10,
+    color: 'grey',
+    backgroundColor: 'white',
+    fontSize: 12,
+    fontFamily: 'Poppins-Regular',
+  },
+  inputselect: {
+    borderWidth: 2,
+    borderColor: COLORS.primary,
+    width: '100%',
+    height: 45,
+    borderRadius: 5,
     color: black,
+    backgroundColor: 'white',
+  },
+  inputTextselect: {
+    color: 'grey',
+    textAlign: 'left',
+    fontSize: 13,
+    fontFamily: 'Poppins-Regular',
+  },
+  dropdownStyle: {
+    backgroundColor: 'white',
+  },
+  rowStyle: {
+    borderBottomColor: COLORS.primary,
+    backgroundColor: 'white',
+  },
+  rowtext: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 16,
   },
   submitBtn: {
-    backgroundColor: '#25376A',
+    backgroundColor: COLORS.primary,
     paddingVertical: 10,
     borderRadius: 5,
     justifyContent: 'center',
@@ -127,11 +194,11 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: width * 0.035,
-    fontWeight: 'bold',
     color: 'white',
+    fontFamily: 'Poppins-SemiBold',
   },
   copyText: {
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-SemiBold',
     color: '#B5B5B5',
   },
   ownerText: {

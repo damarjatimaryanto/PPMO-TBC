@@ -11,7 +11,7 @@ import {
   Alert,
   StatusBar,
 } from 'react-native';
-const COLORS = {primary: '#282534', header: '#FFFFFF'};
+const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -21,9 +21,24 @@ class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar backgroundColor={COLORS.white} />
         <View style={styles.header}>
-          <Text style={styles.selamat}>Selamat Pagi, </Text>
-          <Text style={styles.nama}>Damarjati Maryanto</Text>
+          <Text
+            style={{
+              fontFamily: 'Poppins-Regular',
+              color: COLORS.primary,
+              fontSize: 16,
+            }}>
+            Hi, Selamat Pagi
+          </Text>
+          <Text
+            style={{
+              fontFamily: 'Poppins-Regular',
+              color: COLORS.primary,
+              fontSize: 20,
+            }}>
+            Damarjati Maryanto
+          </Text>
         </View>
         <View style={styles.menu}>
           <View
@@ -47,12 +62,47 @@ class Home extends Component {
                 <Text style={styles.tombol_text}>Track Record</Text>
               </View>
               <View style={styles.kotakmenu}>
-                <TouchableOpacity style={styles.tombol2}>
+                <TouchableOpacity style={styles.tombol1}></TouchableOpacity>
+                <Text style={styles.tombol_text}>Fase</Text>
+              </View>
+              <View style={styles.kotakmenu}>
+                <TouchableOpacity style={styles.tombol1}></TouchableOpacity>
+                <Text style={styles.tombol_text}>Fase</Text>
+              </View>
+              <View style={styles.kotakmenu}>
+                <TouchableOpacity style={styles.tombol1}></TouchableOpacity>
+                <Text style={styles.tombol_text}>Alarm</Text>
+              </View>
+            </View>
+          </View>
+          {/* <TouchableOpacity style={styles.tombol1}></TouchableOpacity>
+          <Text>Track Record</Text> */}
+        </View>
+
+        <View style={styles.menu}>
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              // backgroundColor: 'grey',
+            }}>
+            <View
+              style={{
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                width: '100%',
+              }}>
+              <View style={styles.kotakmenu}>
+                <TouchableOpacity style={styles.tombol1}>
                   <Image
                     style={styles.menuicon}
-                    source={require('./../assets/img/icon/kategori.png')}></Image>
+                    source={require('./../assets/img/icon/track_record.png')}></Image>
                 </TouchableOpacity>
-                <Text style={styles.tombol_text}>Kategori usia</Text>
+                <Text style={styles.tombol_text}>Track Record</Text>
+              </View>
+              <View style={styles.kotakmenu}>
+                <TouchableOpacity style={styles.tombol1}></TouchableOpacity>
+                <Text style={styles.tombol_text}>Fase</Text>
               </View>
               <View style={styles.kotakmenu}>
                 <TouchableOpacity style={styles.tombol1}></TouchableOpacity>
@@ -80,23 +130,26 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     backgroundColor: '#FFFFFF',
     // justifyContent: 'center',
+    fontFamily: 'Poppins-Regular',
   },
   header: {
     // backgroundColor: 'grey',
     marginHorizontal: '2%',
     height: '25%',
     justifyContent: 'center',
+    fontFamily: 'Poppins-Regular',
   },
   selamat: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#25376A',
+    color: COLORS.primary,
+    fontFamily: 'Poppins-Regular',
   },
   nama: {
     fontSize: 25,
     fontWeight: 'bold',
-    color: '#25376A',
-    fontFamily: 'Poppins',
+    color: COLORS.primary,
+    fontFamily: 'Poppins-Regular',
   },
   menu: {
     // backgroundColor: 'blue',
@@ -117,7 +170,7 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#25376A',
+    backgroundColor: COLORS.primary,
     shadowColor: '#171717',
     // shadowOffset: {width: 0, height: 3},
     // shadowOpacity: 0.6,
@@ -132,7 +185,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderWidth: 2,
-    borderColor: '#25376A',
+    borderColor: COLORS.primary,
     shadowColor: '#171717',
     // shadowOffset: {width: 0, height: 3},
     // shadowOpacity: 0.6,
@@ -144,7 +197,8 @@ const styles = StyleSheet.create({
     // top: 10,
     // fontWeight: '500',
     fontSize: 13,
-    color: '#25376A',
+    color: COLORS.primary,
+    fontFamily: 'Poppins-Regular',
   },
   menuicon: {
     width: '70%',

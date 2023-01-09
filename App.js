@@ -6,23 +6,12 @@ import Home from './pages/Home';
 import SplashScreen from './pages/SplashScreen';
 import IntroScreen from './pages/IntroScreen';
 import TrackScreen from './pages/TrackScreen';
-import AlarmScreen from './pages/AlarmSreen';
 import LoginScreen from './pages/LoginScreen';
-function SettingsScreen() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
-
-function Alarm() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
+import PresentaseScreen from './pages/PresentaseScreen';
+import Alarm from './pages/Alarm';
+import AlarmScreen from './pages/AlarmSreen';
+import BuatalarmScreenq from './pages/BuatalarmScreen';
+import BuatalarmScreen from './pages/BuatalarmScreen';
 
 function Akun() {
   return (
@@ -31,30 +20,10 @@ function Akun() {
     </View>
   );
 }
-
+const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 const Tab = createBottomTabNavigator();
 
-export default function App() {
-  React.useEffect(() => {
-    const backAction = () => {
-      Alert.alert('', 'Apakah Anda yakin ingin keluar dari aplikasi?', [
-        {
-          text: 'Batal',
-          onPress: () => null,
-          style: 'cancel',
-        },
-        {text: 'Keluar', onPress: () => BackHandler.exitApp()},
-      ]);
-      return true;
-    };
-
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
-
-    return () => backHandler.remove();
-  }, []);
+const App = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -64,27 +33,31 @@ export default function App() {
           tabBarHideOnKeyboard: true,
           tabBarShowLabel: false,
           tabBarStyle: {
-            backgroundColor: '#25376A',
+            backgroundColor: '#1E319D',
             position: 'absolute',
-            bottom: 15,
-            left: 20,
-            right: 20,
+            // bottom: 15,
+            // left: 20,
+            // right: 20,
             elevation: 0,
-            borderRadius: 20,
-            height: 65,
-            ...styles.shadow,
+            // borderRadius: 20,
+            height: 60,
+            // ...styles.shadow,
           },
         }}>
         <Tab.Screen
           name="SplashScreen"
           component={SplashScreen}
-          options={{tabBarStyle: {display: 'none'}, tabBarButton: () => null}}
+          options={{
+            tabBarStyle: {display: 'none'},
+            headerShown: false,
+            tabBarButton: () => null,
+          }}
         />
         <Tab.Screen
           name="LoginScreen"
           component={LoginScreen}
           options={{
-            headerShown: 'True',
+            headerShown: false,
             tabBarStyle: {display: 'none'},
             tabBarButton: () => null,
           }}
@@ -92,7 +65,20 @@ export default function App() {
         <Tab.Screen
           name="IntroScreen"
           component={IntroScreen}
-          options={{tabBarStyle: {display: 'none'}, tabBarButton: () => null}}
+          options={{
+            tabBarStyle: {display: 'none'},
+            headerShown: false,
+            tabBarButton: () => null,
+          }}
+        />
+        <Tab.Screen
+          name="BuatalarmScreen"
+          component={BuatalarmScreen}
+          options={{
+            tabBarStyle: {display: 'none'},
+            headerShown: false,
+            tabBarButton: () => null,
+          }}
         />
         <Tab.Screen
           name="Home"
@@ -103,11 +89,7 @@ export default function App() {
               return (
                 <View style={styles.buttonicon}>
                   <Image
-                    source={
-                      focused
-                        ? require('./assets/img/icon/home.png')
-                        : require('./assets/img/icon/home.png')
-                    }
+                    source={require('./assets/img/icon/home.png')}
                     resizeMode="contain"
                     style={{
                       alignItems: 'center',
@@ -120,6 +102,7 @@ export default function App() {
                     style={{
                       color: focused ? '#FFFFFF' : '#B2B6C1',
                       fontSize: 13,
+                      fontFamily: 'Poppins-Regular',
                     }}>
                     Home
                   </Text>
@@ -136,11 +119,7 @@ export default function App() {
               return (
                 <View style={styles.buttonicon}>
                   <Image
-                    source={
-                      focused
-                        ? require('./assets/img/icon/track_record.png')
-                        : require('./assets/img/icon/track_record.png')
-                    }
+                    source={require('./assets/img/icon/track_record.png')}
                     resizeMode="contain"
                     style={{
                       alignItems: 'center',
@@ -154,6 +133,7 @@ export default function App() {
                       color: focused ? '#FFFFFF' : '#B2B6C1',
                       fontSize: 13,
                       alignItems: 'center',
+                      fontFamily: 'Poppins-Regular',
                     }}>
                     Track record
                   </Text>
@@ -164,9 +144,10 @@ export default function App() {
         />
 
         <Tab.Screen
-          name="Setting Alarm"
+          name="AlarmScreen"
           component={AlarmScreen}
           options={{
+            // tabBarStyle: {display: 'none'},
             tabBarIcon: ({focused}) => {
               return (
                 <View style={styles.buttonicon}>
@@ -189,6 +170,7 @@ export default function App() {
                       color: focused ? '#FFFFFF' : '#B2B6C1',
                       fontSize: 13,
                       alignItems: 'center',
+                      fontFamily: 'Poppins-Regular',
                     }}>
                     Alarm
                   </Text>
@@ -199,8 +181,8 @@ export default function App() {
         />
 
         <Tab.Screen
-          name="Alarm"
-          component={Alarm}
+          name="PresentaseScreen"
+          component={PresentaseScreen}
           options={{
             tabBarIcon: ({focused}) => {
               return (
@@ -222,6 +204,8 @@ export default function App() {
                     style={{
                       color: focused ? '#FFFFFF' : '#B2B6C1',
                       fontSize: 13,
+                      alignItems: 'center',
+                      fontFamily: 'Poppins-Regular',
                     }}>
                     Presentase
                   </Text>
@@ -255,6 +239,8 @@ export default function App() {
                     style={{
                       color: focused ? '#FFFFFF' : '#B2B6C1',
                       fontSize: 13,
+                      alignItems: 'center',
+                      fontFamily: 'Poppins-Regular',
                     }}>
                     Akun
                   </Text>
@@ -266,7 +252,9 @@ export default function App() {
       </Tab.Navigator>
     </NavigationContainer>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   shadow: {
