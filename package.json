@@ -34,7 +34,8 @@
     "react-native-screens": "^3.18.2",
     "react-native-select-dropdown": "^1.8.0",
     "react-native-settings": "^0.2.3",
-    "react-native-svg": "^13.6.0"
+    "react-native-svg": "^13.6.0",
+    "react-native-vector-icons": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

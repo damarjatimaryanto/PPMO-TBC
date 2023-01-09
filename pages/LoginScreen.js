@@ -13,6 +13,8 @@ import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNSettings from 'react-native-settings';
 import {TextInput} from 'react-native-gesture-handler';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import SelectDropdown from 'react-native-select-dropdown';
 
@@ -67,6 +69,19 @@ const LoginScreen = () => {
               // if data array is an array of objects then return item.property to represent item in dropdown
               return item;
             }}
+            renderDropdownIcon={isOpened => {
+              return (
+                <Image
+                  style={{width: 20, height: 10}}
+                  source={
+                    isOpened
+                      ? require('./../assets/img/icon/down.png')
+                      : require('./../assets/img/icon/up.png')
+                  }
+                />
+              );
+            }}
+            dropdownIconPosition={'right'}
             buttonStyle={styles.inputselect}
             buttonTextStyle={styles.inputTextselect}
             dropdownStyle={styles.dropdownStyle}
@@ -93,6 +108,19 @@ const LoginScreen = () => {
               // if data array is an array of objects then return item.property to represent item in dropdown
               return item;
             }}
+            renderDropdownIcon={isOpened => {
+              return (
+                <Image
+                  style={{width: 20, height: 10}}
+                  source={
+                    isOpened
+                      ? require('./../assets/img/icon/down.png')
+                      : require('./../assets/img/icon/up.png')
+                  }
+                />
+              );
+            }}
+            dropdownIconPosition={'right'}
             buttonStyle={styles.inputselect}
             buttonTextStyle={styles.inputTextselect}
             dropdownStyle={styles.dropdownStyle}
@@ -176,6 +204,8 @@ const styles = StyleSheet.create({
   },
   dropdownStyle: {
     backgroundColor: 'white',
+    borderRadius: 15,
+    paddingVertical: 2,
   },
   rowStyle: {
     borderBottomColor: COLORS.primary,
@@ -183,7 +213,9 @@ const styles = StyleSheet.create({
   },
   rowtext: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 16,
+    fontSize: 14,
+    textAlign: 'left',
+    marginLeft: 15,
   },
   submitBtn: {
     backgroundColor: COLORS.primary,
