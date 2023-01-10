@@ -17,7 +17,33 @@ class Home extends Component {
     super(props);
     this.state = {};
   }
+  backAction = () => {
+    Alert.alert('', 'Apakah anda yakin ingin keluar dari aplikasi ?', [
+      {
+        text: 'cancel',
+        onPress: () => null,
+        style: 'cancel',
+      },
+      {
+        text: 'yes',
+        onPress: () => BackHandler.exitApp(),
+      },
+    ]);
+    return true;
+  };
 
+  componentDidMount() {
+    this.BackHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.backAction,
+    );
+  }
+  componentWillUnmount() {
+    this.BackHandler = BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this.backAction,
+    );
+  }
   render() {
     return (
       <View style={styles.container}>

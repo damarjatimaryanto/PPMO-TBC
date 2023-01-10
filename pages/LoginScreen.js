@@ -132,7 +132,7 @@ const LoginScreen = () => {
         <View style={styles.btn_Container}>
           <TouchableOpacity
             style={styles.submitBtn}
-            onPress={() => navigation.navigate('Home')}>
+            onPress={() => navigation.navigate('Tab1')}>
             <Text style={styles.btnText}>Simpan</Text>
           </TouchableOpacity>
         </View>
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: 'grey',
     backgroundColor: 'white',
-    fontSize: 12,
+    fontSize: 16,
     fontFamily: 'Poppins-Regular',
   },
   inputselect: {

@@ -22,27 +22,12 @@ export class TrackScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingVertical: 20,
-          }}>
-          <Text
-            style={{
-              fontFamily: 'Poppins-SemiBold',
-              fontSize: 16,
-              color: COLORS.primary,
-            }}>
-            Track Record
-          </Text>
-        </View>
         <Calendar
           style={{backgroundColor: COLORS.white}}
           theme={{
             backgroundColor: COLORS.white,
             calendarBackground: COLORS.white,
-            textSectionTitleColor: 'blue',
+            textSectionTitleColor: COLORS.primary,
             textSectionTitleDisabledColor: 'green',
             selectedDayBackgroundColor: 'red',
             selectedDayTextColor: '#ffffff',
@@ -51,10 +36,10 @@ export class TrackScreen extends Component {
             textDisabledColor: 'grey',
             dotColor: 'red',
             selectedDotColor: '#ffffff',
-            arrowColor: 'orange',
+            arrowColor: COLORS.primary,
             disabledArrowColor: '#d9e1e8',
-            monthTextColor: 'blue',
-            indicatorColor: 'blue',
+            monthTextColor: COLORS.primary,
+            indicatorColor: COLORS.primary,
             textDayFontFamily: 'Poppins-Regular',
             textMonthFontFamily: 'Poppins-Regular',
             textDayHeaderFontFamily: 'Poppins-Regular',
@@ -77,14 +62,14 @@ export class TrackScreen extends Component {
             '2023-01-02': {
               disabled: true,
               startingDay: true,
-              color: 'blue',
+              color: COLORS.primary,
               endingDay: true,
               textColor: 'white',
             },
             '2023-01-03': {
               disabled: true,
               startingDay: true,
-              color: 'blue',
+              color: COLORS.primary,
               endingDay: true,
               textColor: 'white',
             },
@@ -98,14 +83,14 @@ export class TrackScreen extends Component {
             '2023-01-05': {
               disabled: true,
               startingDay: true,
-              color: 'blue',
+              color: COLORS.primary,
               endingDay: true,
               textColor: 'white',
             },
             '2023-01-06': {
               disabled: true,
               startingDay: true,
-              color: 'blue',
+              color: COLORS.primary,
               endingDay: true,
               textColor: 'white',
             },
@@ -130,7 +115,7 @@ export class TrackScreen extends Component {
             style={{
               width: 40,
               height: 40,
-              backgroundColor: 'blue',
+              backgroundColor: COLORS.primary,
               borderRadius: 35,
               marginRight: 20,
             }}></View>

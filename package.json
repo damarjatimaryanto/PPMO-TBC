@@ -16,6 +16,8 @@
     "@react-navigation/bottom-tabs": "^6.5.2",
     "@react-navigation/native": "^6.1.1",
     "@react-navigation/native-stack": "^6.9.7",
+    "@react-navigation/stack": "^6.3.10",
+    "moment": "^2.29.4",
     "react": "18.1.0",
     "react-native": "0.70.6",
     "react-native-alarm-manager": "^1.2.1",
@@ -34,6 +36,7 @@
     "react-native-screens": "^3.18.2",
     "react-native-select-dropdown": "^1.8.0",
     "react-native-settings": "^0.2.3",
+    "react-native-sqlite-storage": "^6.0.1",
     "react-native-svg": "^13.6.0",
     "react-native-vector-icons": "^9.2.0"
   },

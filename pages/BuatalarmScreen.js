@@ -8,12 +8,18 @@ import {
   Alert,
   Dimensions,
 } from 'react-native';
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNSettings from 'react-native-settings';
 import {TextInput} from 'react-native-gesture-handler';
-import AlarmScreen from './AlarmSreen';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import SelectDropdown from 'react-native-select-dropdown';
+
+const countries = ['Fase Intensif (Ke 1)', 'Fase Lanjutan ( Ke 2)'];
+const kategori = ['Pasien Baru', 'Pasien Lama'];
 
 const blue = '#0D4AA7';
 const black = '#3d3d3d';
@@ -26,57 +32,146 @@ const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 
 const BuatalarmScreen = () => {
   const navigation = useNavigation();
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const showTimePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideTimePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleTimeConfirm = date => {
+    console.warn('A Time has been picked: ', date);
+    hideDatePicker();
+  };
   return (
     <View style={styles.container}>
-      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-        <View style={{backgroundColor: 'grey'}}>
-          <TouchableOpacity onPress={navigation.navigate('AlarmScreen')}>
-            <Text>Back</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{backgroundColor: 'blue'}}>
-          <Text>Alarm Detail</Text>
-        </View>
-        <View style={{backgroundColor: 'grey'}}></View>
-      </View>
-      <View style={styles.imgContainer}>
-        <Image
-          style={{width: 90, height: 73}}
-          source={require('../assets/img/icon/logoobat_biru.png')}
-        />
-      </View>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="time"
+        is24Hour
+        onConfirm={handleTimeConfirm}
+        onCancel={hideTimePicker}
+      />
 
       <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Nama Lengkap</Text>
-
-          <TextInput
-            style={styles.input}
-            placeholderTextColor={grey}
-            placeholder="Masukkan Nama Lengkap Anda"></TextInput>
+          <Text style={styles.h2}>Kategori Pasien</Text>
+          <SelectDropdown
+            data={kategori}
+            onSelect={(selectedItem, index) => {
+              console.log(selectedItem, index);
+            }}
+            defaultButtonText={'Pilih Kategori Pasien'}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              // text represented after item is selected
+              // if data array is an array of objects then return selectedItem.property to render after item is selected
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              // text represented for each item in dropdown
+              // if data array is an array of objects then return item.property to represent item in dropdown
+              return item;
+            }}
+            renderDropdownIcon={isOpened => {
+              return (
+                <Image
+                  style={{width: 20, height: 10}}
+                  source={
+                    isOpened
+                      ? require('./../assets/img/icon/down.png')
+                      : require('./../assets/img/icon/up.png')
+                  }
+                />
+              );
+            }}
+            dropdownIconPosition={'right'}
+            buttonStyle={styles.inputselect}
+            buttonTextStyle={styles.inputTextselect}
+            dropdownStyle={styles.dropdownStyle}
+            rowStyle={styles.rowstyle}
+            rowTextStyle={styles.rowtext}
+          />
         </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Kategori usia</Text>
 
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            placeholderTextColor={grey}
-            placeholder="Pilih Ketegori"></TextInput>
-        </View>
         <View style={styles.inputContainer}>
           <Text style={styles.h2}>Fase Pengobatan</Text>
-
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            placeholderTextColor={grey}
-            placeholder="Pilih Fase"></TextInput>
+          <SelectDropdown
+            data={countries}
+            onSelect={(selectedItem, index) => {
+              console.log(selectedItem, index);
+            }}
+            defaultButtonText={'Pilih fase pengobatan'}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              // text represented after item is selected
+              // if data array is an array of objects then return selectedItem.property to render after item is selected
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              // text represented for each item in dropdown
+              // if data array is an array of objects then return item.property to represent item in dropdown
+              return item;
+            }}
+            renderDropdownIcon={isOpened => {
+              return (
+                <Image
+                  style={{width: 20, height: 10}}
+                  source={
+                    isOpened
+                      ? require('./../assets/img/icon/down.png')
+                      : require('./../assets/img/icon/up.png')
+                  }
+                />
+              );
+            }}
+            dropdownIconPosition={'right'}
+            buttonStyle={styles.inputselect}
+            buttonTextStyle={styles.inputTextselect}
+            dropdownStyle={styles.dropdownStyle}
+            rowStyle={styles.rowstyle}
+            rowTextStyle={styles.rowtext}
+          />
         </View>
+
+        <View style={styles.inputhorizontal}>
+          <TextInput
+            style={styles.input_horizontal}
+            placeholderTextColor={grey}
+            keyboardType="number-pad"
+            placeholder="13 : 30"
+          />
+          <TouchableOpacity
+            onPress={showTimePicker}
+            style={{
+              width: 43,
+              height: 43,
+              backgroundColor: COLORS.primary,
+              borderRadius: 5,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Image
+              style={{width: '80%', height: '80%'}}
+              source={require('./../assets/img/icon/time.png')}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.inputhorizontal}>
+          <TextInput
+            style={styles.input_horizontal}
+            placeholderTextColor={grey}
+            keyboardType="number-pad"
+            placeholder="0"
+          />
+          <Text style={styles.h2}>Hari</Text>
+        </View>
+
         <View style={styles.btn_Container}>
           <TouchableOpacity
             style={styles.submitBtn}
-            onPress={() => navigation.navigate('Home')}>
+            onPress={() => navigation.navigate('Tab1')}>
             <Text style={styles.btnText}>Simpan</Text>
           </TouchableOpacity>
         </View>
@@ -105,6 +200,11 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginVertical: 5,
   },
+  inputhorizontal: {
+    marginVertical: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   btn_Container: {
     marginVertical: 15,
   },
@@ -123,9 +223,59 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: COLORS.primary,
     paddingVertical: width * 0.013,
-    paddingHorizontal: width * 0.03,
+    paddingHorizontal: width * 0.04,
+    height: 45,
+    borderRadius: 5,
+    color: 'grey',
+    backgroundColor: 'white',
+    fontSize: 16,
+    fontFamily: 'Poppins-Regular',
+  },
+  input_horizontal: {
+    borderWidth: 2,
+    borderColor: COLORS.primary,
+    paddingVertical: width * 0.013,
+    paddingHorizontal: width * 0.04,
+    width: '30%',
+    height: 45,
+    borderRadius: 5,
+    color: 'grey',
+    backgroundColor: 'white',
+    fontSize: 16,
+    fontFamily: 'Poppins-Regular',
+    marginRight: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputselect: {
+    borderWidth: 2,
+    borderColor: COLORS.primary,
+    width: '100%',
+    height: 45,
     borderRadius: 5,
     color: black,
+    backgroundColor: 'white',
+  },
+  inputTextselect: {
+    color: 'grey',
+    textAlign: 'left',
+    fontSize: 13,
+    fontFamily: 'Poppins-Regular',
+  },
+  dropdownStyle: {
+    backgroundColor: 'white',
+    borderRadius: 15,
+    paddingVertical: 2,
+  },
+  rowStyle: {
+    borderBottomColor: COLORS.primary,
+    backgroundColor: 'white',
+  },
+  rowtext: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 14,
+    textAlign: 'left',
+    marginLeft: 15,
   },
   submitBtn: {
     backgroundColor: COLORS.primary,

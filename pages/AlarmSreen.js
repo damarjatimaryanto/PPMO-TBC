@@ -14,76 +14,91 @@ import {
 } from 'react-native';
 import React, {useRef, useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 const AlarmScreen = () => {
   const navigation = useNavigation();
-  const [shouldShow, setShouldShow] = useState(true);
-  const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
-
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = date => {
-    console.warn('A date has been picked: ', date);
-    hideDatePicker();
-  };
-
-  const showTimePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideTimePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleTimeConfirm = date => {
-    console.warn('A Time has been picked: ', date);
-    hideDatePicker();
-  };
 
   return (
     <View style={styles.container}>
-      {/* <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="datetime"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-      /> */}
-
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingVertical: 20,
-        }}>
-        <Text
-          style={{
-            fontFamily: 'Poppins-SemiBold',
-            fontSize: 16,
-            color: COLORS.primary,
-          }}>
-          Alarm
-        </Text>
-      </View>
-      <View>
-        <View>
-          <Text></Text>
+      <View style={styles.box}>
+        <View style={styles.jam}>
+          <Text
+            style={{
+              fontFamily: 'Poppins-SemiBold',
+              fontSize: 30,
+              color: 'white',
+            }}>
+            13 : 30
+          </Text>
+        </View>
+        <View style={styles.keterangan}>
+          <Text
+            style={{
+              fontFamily: 'Poppins-Bold',
+              fontSize: 20,
+              color: 'white',
+            }}>
+            Pasien Baru
+          </Text>
+          <Text
+            style={{
+              fontFamily: 'Poppins-Regular',
+              fontSize: 16,
+              color: 'white',
+            }}>
+            Fase Intensif
+          </Text>
+        </View>
+        <View style={styles.gmbar_container}>
+          <Image
+            style={{width: 50, height: 50}}
+            source={require('./../assets/img/icon/bell_miss.png')}
+          />
         </View>
       </View>
+      <View style={styles.box}>
+        <View style={styles.jam}>
+          <Text
+            style={{
+              fontFamily: 'Poppins-SemiBold',
+              fontSize: 30,
+              color: 'white',
+            }}>
+            18 : 15
+          </Text>
+        </View>
+        <View style={styles.keterangan}>
+          <Text
+            style={{
+              fontFamily: 'Poppins-Bold',
+              fontSize: 20,
+              color: 'white',
+            }}>
+            Pasien Lama
+          </Text>
+          <Text
+            style={{
+              fontFamily: 'Poppins-Regular',
+              fontSize: 16,
+              color: 'white',
+            }}>
+            Fase Lanjutan
+          </Text>
+        </View>
+        <View style={styles.gmbar_container}>
+          <Image
+            style={{width: 50, height: 50}}
+            source={require('./../assets/img/icon/bell_check.png')}
+          />
+        </View>
+      </View>
+
       <TouchableOpacity
         style={styles.floatingbutton}
-        // onPress={navigation.navigate('LoginScreen')}
-      >
+        onPress={() => navigation.navigate('BuatalarmScreen')}>
         <View
           style={{
             flexDirection: 'row',
@@ -134,5 +149,30 @@ const styles = StyleSheet.create({
     bottom: 90,
     right: 20,
     // width: 100,
+  },
+  box: {
+    backgroundColor: COLORS.primary,
+    height: 100,
+    width: '90%',
+    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: '5%',
+    marginVertical: 15,
+  },
+  jam: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'yellow',
+  },
+  keterangan: {
+    // backgroundColor: 'grey',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  gmbar_container: {
+    // backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

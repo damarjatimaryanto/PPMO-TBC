@@ -43,7 +43,7 @@ const IntroScreen = () => {
       <View style={{top: 40}}>
         <TouchableOpacity
           style={[styles.btn]}
-          onPress={() => navigation.navigate('LoginScreen')}>
+          onPress={() => navigation.navigate('Tab1')}>
           <Text
             style={{fontSize: 20, fontWeight: 'bold', color: COLORS.primary}}>
             Mulai
