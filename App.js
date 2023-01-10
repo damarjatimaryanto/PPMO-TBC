@@ -19,6 +19,7 @@ import PresentaseScreen from './pages/PresentaseScreen';
 import AlarmScreen from './pages/AlarmSreen';
 import BuatalarmScreen from './pages/BuatalarmScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import RegisterScreen from './pages/RegisterScreen';
 
 const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 const Tab = createBottomTabNavigator();
@@ -56,6 +57,11 @@ const App = () => {
         <Stack.Screen
           name="LoginScreen"
           component={LoginScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="RegisterScreen"
+          component={RegisterScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen

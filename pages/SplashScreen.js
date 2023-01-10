@@ -31,9 +31,14 @@ const SplashScreen = () => {
     }).start();
   };
 
-  const navig = () => {
+  const navig = async () => {
+    // const intro = await AsyncStorage.getItem('intro');
     setTimeout(async () => {
+      // if (intro != '1') {
       navigation.navigate('IntroScreen');
+      // } else {
+      //   navigation.navigate('Tab1');
+      // }
     }, 3000);
   };
   return (

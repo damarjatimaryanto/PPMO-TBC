@@ -43,97 +43,36 @@ const LoginScreen = () => {
 
       <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Nama Lengkap</Text>
+          <Text style={styles.h2}>Username</Text>
 
           <TextInput
             style={styles.input}
             placeholderTextColor={grey}
-            placeholder="Masukkan Nama Lengkap Anda"></TextInput>
+            placeholder="Masukan Username"></TextInput>
         </View>
-
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Fase Pengobatan</Text>
-          <SelectDropdown
-            data={countries}
-            onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
-            }}
-            defaultButtonText={'Pilih fase pengobatan'}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              // text represented after item is selected
-              // if data array is an array of objects then return selectedItem.property to render after item is selected
-              return selectedItem;
-            }}
-            rowTextForSelection={(item, index) => {
-              // text represented for each item in dropdown
-              // if data array is an array of objects then return item.property to represent item in dropdown
-              return item;
-            }}
-            renderDropdownIcon={isOpened => {
-              return (
-                <Image
-                  style={{width: 20, height: 10}}
-                  source={
-                    isOpened
-                      ? require('./../assets/img/icon/down.png')
-                      : require('./../assets/img/icon/up.png')
-                  }
-                />
-              );
-            }}
-            dropdownIconPosition={'right'}
-            buttonStyle={styles.inputselect}
-            buttonTextStyle={styles.inputTextselect}
-            dropdownStyle={styles.dropdownStyle}
-            rowStyle={styles.rowstyle}
-            rowTextStyle={styles.rowtext}
-          />
-        </View>
+          <Text style={styles.h2}>Password</Text>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Kategori Usia</Text>
-          <SelectDropdown
-            data={kategori}
-            onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
-            }}
-            defaultButtonText={'Pilih Kategori Usia'}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              // text represented after item is selected
-              // if data array is an array of objects then return selectedItem.property to render after item is selected
-              return selectedItem;
-            }}
-            rowTextForSelection={(item, index) => {
-              // text represented for each item in dropdown
-              // if data array is an array of objects then return item.property to represent item in dropdown
-              return item;
-            }}
-            renderDropdownIcon={isOpened => {
-              return (
-                <Image
-                  style={{width: 20, height: 10}}
-                  source={
-                    isOpened
-                      ? require('./../assets/img/icon/down.png')
-                      : require('./../assets/img/icon/up.png')
-                  }
-                />
-              );
-            }}
-            dropdownIconPosition={'right'}
-            buttonStyle={styles.inputselect}
-            buttonTextStyle={styles.inputTextselect}
-            dropdownStyle={styles.dropdownStyle}
-            rowStyle={styles.rowstyle}
-            rowTextStyle={styles.rowtext}
-          />
+          <TextInput
+            style={styles.input}
+            placeholderTextColor={grey}
+            secureTextEntry={true}
+            placeholder="Masukan Password"></TextInput>
         </View>
 
         <View style={styles.btn_Container}>
           <TouchableOpacity
             style={styles.submitBtn}
             onPress={() => navigation.navigate('Tab1')}>
-            <Text style={styles.btnText}>Simpan</Text>
+            <Text style={styles.btnText}>Login</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.inputContainer_2}>
+          <Text style={styles.kamu_nanya}>Belum Punya Akun ? </Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('RegisterScreen')}>
+            <Text style={styles.kamu_nanya_2}>Buat Akun</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -161,6 +100,10 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginVertical: 5,
   },
+  inputContainer_2: {
+    marginVertical: 5,
+    flexDirection: 'row',
+  },
   btn_Container: {
     marginVertical: 15,
   },
@@ -174,6 +117,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.primary,
     fontFamily: 'Poppins-SemiBold',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  kamu_nanya: {
+    fontSize: 16,
+    color: 'black',
+    fontFamily: 'Poppins-Medium',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  kamu_nanya_2: {
+    fontSize: 16,
+    color: COLORS.primary,
+    fontFamily: 'Poppins-SemiBold',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   input: {
     borderWidth: 2,

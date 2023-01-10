@@ -17,6 +17,15 @@ import Home from './Home';
 const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 const IntroScreen = () => {
   const navigation = useNavigation();
+
+  // const onStart = async () => {
+  //   try {
+  //     await AsyncStorage.setItem('intro', '1');
+  //     navigation.navigate('Tab1');
+  //   } catch (e) {
+  //     // saving error
+  //   }
+  // };
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
@@ -43,7 +52,7 @@ const IntroScreen = () => {
       <View style={{top: 40}}>
         <TouchableOpacity
           style={[styles.btn]}
-          onPress={() => navigation.navigate('Tab1')}>
+          onPress={() => navigation.navigate('LoginScreen')}>
           <Text
             style={{fontSize: 20, fontWeight: 'bold', color: COLORS.primary}}>
             Mulai
