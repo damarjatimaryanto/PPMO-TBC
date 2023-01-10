@@ -15,11 +15,12 @@ import SplashScreen from './pages/SplashScreen';
 import IntroScreen from './pages/IntroScreen';
 import TrackScreen from './pages/TrackScreen';
 import LoginScreen from './pages/LoginScreen';
-import PresentaseScreen from './pages/PresentaseScreen';
+
 import AlarmScreen from './pages/AlarmSreen';
 import BuatalarmScreen from './pages/BuatalarmScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import RegisterScreen from './pages/RegisterScreen';
+import Akun from './pages/Akun';
 
 const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 const Tab = createBottomTabNavigator();
@@ -173,10 +174,10 @@ export function Tab1() {
       />
 
       <Tab.Screen
-        name="PresentaseScreen"
-        component={PresentaseScreen}
+        name="Akun"
+        component={Akun}
         options={{
-          title: 'Presentase',
+          title: 'Akun',
           tabBarIcon: ({focused}) => {
             return (
               <View style={styles.buttonicon}>
@@ -200,7 +201,7 @@ export function Tab1() {
                     alignItems: 'center',
                     fontFamily: 'Poppins-Regular',
                   }}>
-                  Presentase
+                  Akun
                 </Text>
               </View>
             );
