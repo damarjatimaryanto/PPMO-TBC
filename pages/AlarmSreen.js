@@ -92,7 +92,7 @@ const AlarmScreen = () => {
                 }}>
                 <Image
                   style={{width: '80%', height: '80%'}}
-                  source={require('./../assets/img/icon/time.png')}
+                  source={require('./../assets/img/icon/alarm_plus.png')}
                 />
               </TouchableOpacity>
             </View>
@@ -104,7 +104,14 @@ const AlarmScreen = () => {
                 keyboardType="number-pad"
                 placeholder="0"
               />
-              <Text style={styles.h2}>Hari</Text>
+              <Text
+                style={{
+                  color: 'grey',
+                  fontFamily: 'Poppins-Medium',
+                  fontSize: 16,
+                }}>
+                Hari
+              </Text>
             </View>
 
             <View
@@ -117,14 +124,20 @@ const AlarmScreen = () => {
                 onPress={() => {
                   setModal(false);
                 }}>
-                <Text style={styles.h2}>Batal</Text>
+                <Text
+                  style={{color: COLORS.white, fontFamily: 'Poppins-Medium'}}>
+                  Batal
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.btn, styles.btn1]}
                 onPress={() => {
                   onSubmit();
                 }}>
-                <Text style={[styles.h2, {color: COLORS.white}]}>Simpan</Text>
+                <Text
+                  style={[{color: COLORS.white, fontFamily: 'Poppins-Medium'}]}>
+                  Simpan
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -217,12 +230,15 @@ const AlarmScreen = () => {
           <Text
             style={{
               fontSize: 16,
-              color: 'grey',
+              color: 'white',
               margin: 10,
+              fontFamily: 'Poppins-Medium',
             }}>
-            Add
+            Tambah
           </Text>
-          <Image source={require('./../assets/img/icon/plusalarm.png')}></Image>
+          <Image
+            style={{width: 24, height: 24}}
+            source={require('./../assets/img/icon/alarm_plus.png')}></Image>
         </View>
       </TouchableOpacity>
     </View>
@@ -234,7 +250,7 @@ export default AlarmScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#EAEAEA',
 
     alignItems: 'center',
   },
@@ -257,7 +273,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 90,
     right: 20,
-    // width: 100,
+    width: 120,
+    backgroundColor: COLORS.primary,
+    borderRadius: 10,
   },
   box: {
     backgroundColor: COLORS.primary,
@@ -267,7 +285,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: '5%',
-    marginVertical: 15,
+    marginTop: 15,
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.4,
+
+    elevation: 10,
   },
   jam: {
     justifyContent: 'center',
@@ -348,8 +375,10 @@ const styles = StyleSheet.create({
   },
   btn1: {
     backgroundColor: COLORS.primary,
+    borderRadius: 5,
   },
   btn2: {
-    backgroundColor: 'yellow',
+    backgroundColor: 'grey',
+    borderRadius: 5,
   },
 });

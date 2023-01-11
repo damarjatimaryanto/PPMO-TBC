@@ -13,7 +13,6 @@ import {
 import React, {useRef, useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {PieChart} from 'react-native-chart-kit';
-import {ScrollView} from 'react-native-gesture-handler';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -68,7 +67,7 @@ const Akun = () => {
         </View>
       </View>
 
-      {/* <PieChart
+      <PieChart
         data={[
           {
             name: 'Minum Obat',
@@ -85,7 +84,7 @@ const Akun = () => {
             legendFontSize: 11,
           },
         ]}
-        width={Dimensions.get('window').width - 20} 
+        width={Dimensions.get('window').width - 20}
         height={220}
         chartConfig={{
           color: (opacity = 1) => `white`,
@@ -102,7 +101,7 @@ const Akun = () => {
           marginVertical: 8,
           borderRadius: 16,
         }}
-      /> */}
+      />
 
       <TouchableOpacity
         style={styles.floatingbutton}

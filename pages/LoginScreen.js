@@ -35,15 +35,19 @@ const LoginScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.imgContainer}>
-        <Image
-          style={{width: 90, height: 73}}
-          source={require('../assets/img/icon/logoobat_biru.png')}
-        />
+        <Text
+          style={{
+            color: COLORS.primary,
+            fontSize: 30,
+            fontFamily: 'Poppins-Bold',
+          }}>
+          Login
+        </Text>
       </View>
 
       <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Username</Text>
+          <Text style={styles.h2}>Username :</Text>
 
           <TextInput
             style={styles.input}
@@ -51,7 +55,7 @@ const LoginScreen = () => {
             placeholder="Masukan Username"></TextInput>
         </View>
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Password</Text>
+          <Text style={styles.h2}>Password :</Text>
 
           <TextInput
             style={styles.input}
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
   },
   h2: {
     fontSize: 16,
-    color: COLORS.primary,
+    color: 'grey',
     fontFamily: 'Poppins-SemiBold',
     justifyContent: 'center',
     alignItems: 'center',
@@ -139,7 +143,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
     paddingVertical: width * 0.013,
     paddingHorizontal: width * 0.04,
-    height: 45,
+    height: 60,
     borderRadius: 5,
     color: 'grey',
     backgroundColor: 'white',

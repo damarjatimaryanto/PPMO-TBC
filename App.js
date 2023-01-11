@@ -21,8 +21,9 @@ import BuatalarmScreen from './pages/BuatalarmScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import RegisterScreen from './pages/RegisterScreen';
 import Akun from './pages/Akun';
+import AkunScreen from './pages/AkunScreen';
 
-const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
+const COLORS = {primary: '#225AEB', white: '#FFFFFF'};
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -98,7 +99,7 @@ export function Tab1() {
           left: 20,
           right: 20,
           elevation: 0,
-          borderRadius: 20,
+          borderRadius: 15,
           height: 65,
           // ...styles.shadow,
         },
@@ -113,11 +114,7 @@ export function Tab1() {
             return (
               <View style={styles.buttonicon}>
                 <Image
-                  source={
-                    focused
-                      ? require('./assets/img/icon/alarm.png')
-                      : require('./assets/img/icon/alarm.png')
-                  }
+                  source={require('./assets/img/icon/bell.png')}
                   resizeMode="contain"
                   style={{
                     alignItems: 'center',
@@ -144,12 +141,12 @@ export function Tab1() {
         name="TrackScreen"
         component={TrackScreen}
         options={{
-          title: 'Track Record',
+          title: 'Progress',
           tabBarIcon: ({focused}) => {
             return (
               <View style={styles.buttonicon}>
                 <Image
-                  source={require('./assets/img/icon/track_record.png')}
+                  source={require('./assets/img/icon/progress.png')}
                   resizeMode="contain"
                   style={{
                     alignItems: 'center',
@@ -165,7 +162,7 @@ export function Tab1() {
                     alignItems: 'center',
                     fontFamily: 'Poppins-Regular',
                   }}>
-                  Track record
+                  Progress
                 </Text>
               </View>
             );
@@ -174,19 +171,15 @@ export function Tab1() {
       />
 
       <Tab.Screen
-        name="Akun"
-        component={Akun}
+        name="AkunScreen"
+        component={AkunScreen}
         options={{
           title: 'Akun',
           tabBarIcon: ({focused}) => {
             return (
               <View style={styles.buttonicon}>
                 <Image
-                  source={
-                    focused
-                      ? require('./assets/img/icon/presentase.png')
-                      : require('./assets/img/icon/presentase.png')
-                  }
+                  source={require('./assets/img/icon/account.png')}
                   resizeMode="contain"
                   style={{
                     width: 25,

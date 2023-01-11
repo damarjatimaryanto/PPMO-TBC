@@ -35,15 +35,19 @@ const RegisterScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.imgContainer}>
-        <Image
-          style={{width: 90, height: 73}}
-          source={require('../assets/img/icon/logoobat_biru.png')}
-        />
+        <Text
+          style={{
+            color: COLORS.primary,
+            fontSize: 30,
+            fontFamily: 'Poppins-Bold',
+          }}>
+          Daftar Akun
+        </Text>
       </View>
 
       <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Nama Lengkap</Text>
+          <Text style={styles.h2}>Nama Lengkap :</Text>
 
           <TextInput
             style={styles.input}
@@ -51,7 +55,7 @@ const RegisterScreen = () => {
             placeholder="Masukkan Nama Lengkap Anda"></TextInput>
         </View>
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Username</Text>
+          <Text style={styles.h2}>Username :</Text>
 
           <TextInput
             style={styles.input}
@@ -60,7 +64,7 @@ const RegisterScreen = () => {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Password</Text>
+          <Text style={styles.h2}>Password :</Text>
 
           <TextInput
             style={styles.input}
@@ -69,7 +73,7 @@ const RegisterScreen = () => {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Kategori Pasien</Text>
+          <Text style={styles.h2}>Kategori Pasien :</Text>
           <SelectDropdown
             data={kategori}
             onSelect={(selectedItem, index) => {
@@ -108,7 +112,7 @@ const RegisterScreen = () => {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Fase Pengobatan</Text>
+          <Text style={styles.h2}>Fase Pengobatan :</Text>
           <SelectDropdown
             data={kategori}
             onSelect={(selectedItem, index) => {
@@ -169,7 +173,7 @@ const styles = StyleSheet.create({
   imgContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: '20%',
+    paddingVertical: '10%',
   },
   formContainer: {
     paddingHorizontal: width * 0.055,
@@ -189,7 +193,7 @@ const styles = StyleSheet.create({
   },
   h2: {
     fontSize: 16,
-    color: COLORS.primary,
+    color: 'grey',
     fontFamily: 'Poppins-SemiBold',
   },
   input: {
@@ -197,18 +201,30 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
     paddingVertical: width * 0.013,
     paddingHorizontal: width * 0.04,
-    height: 45,
+    height: 50,
     borderRadius: 5,
     color: 'grey',
     backgroundColor: 'white',
     fontSize: 16,
     fontFamily: 'Poppins-Regular',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 2,
+      height: 5,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 9,
   },
   inputselect: {
     borderWidth: 2,
     borderColor: COLORS.primary,
     width: '100%',
-    height: 45,
+    height: 50,
     borderRadius: 5,
     color: black,
     backgroundColor: 'white',
