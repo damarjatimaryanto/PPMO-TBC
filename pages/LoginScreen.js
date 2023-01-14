@@ -6,13 +6,15 @@ import {
   View,
   Animated,
   Alert,
+  ActivityIndicator,
   Dimensions,
+  Modal
 } from 'react-native';
-import React, {useRef, useEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useRef, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNSettings from 'react-native-settings';
-import {TextInput} from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -28,12 +30,76 @@ const grey = '#5C5F68';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
-const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
+const COLORS = { primary: '#1E319D', white: '#FFFFFF' };
 
 const LoginScreen = () => {
   const navigation = useNavigation();
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async () => {
+    fetch('https://afanalfiandi.com/ppmo/api/api.php?op=login', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password
+      })
+    }).then((res) => res.json())
+      .then((response) => {
+        setLoading(true);
+        setTimeout(async () => {
+          if (response != 0) {
+
+            const uid = response.id_user;
+            const fase = response.fase;
+            const id_fase = response.id_fase_detail;
+            const id_kat = response.id_kategori_detail;
+            const kategori = response.kategori;
+            const nama = response.nama;
+            const username = response.username;
+
+            AsyncStorage.setItem('loggedIn', '1');
+            AsyncStorage.setItem('uid', uid);
+            AsyncStorage.setItem('fase', fase);
+            AsyncStorage.setItem('id_fase', id_fase);
+            AsyncStorage.setItem('id_kat', id_kat);
+            AsyncStorage.setItem('kategori', kategori);
+            AsyncStorage.setItem('nama', nama);
+            AsyncStorage.setItem('username', username);
+            
+            setLoading(false);
+            navigation.navigate('Tab1');
+          } else {
+            Alert.alert('', 'Login Gagal!');
+            setLoading(false);
+          }
+        }, 3000);
+
+        
+      }).catch((e) => {
+        console.log(e);
+      })
+  }
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={loading}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModal(false);
+        }}
+      >
+        <View style={{ position: 'absolute', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+      </Modal>
       <View style={styles.imgContainer}>
         <Text
           style={{
@@ -52,6 +118,8 @@ const LoginScreen = () => {
           <TextInput
             style={styles.input}
             placeholderTextColor={grey}
+            onChangeText={setUsername}
+            value={username}
             placeholder="Masukan Username"></TextInput>
         </View>
         <View style={styles.inputContainer}>
@@ -60,6 +128,8 @@ const LoginScreen = () => {
           <TextInput
             style={styles.input}
             placeholderTextColor={grey}
+            onChangeText={setPassword}
+            value={password}
             secureTextEntry={true}
             placeholder="Masukan Password"></TextInput>
         </View>
@@ -67,7 +137,7 @@ const LoginScreen = () => {
         <View style={styles.btn_Container}>
           <TouchableOpacity
             style={styles.submitBtn}
-            onPress={() => navigation.navigate('Tab1')}>
+            onPress={() => { onSubmit() }}>
             <Text style={styles.btnText}>Login</Text>
           </TouchableOpacity>
         </View>

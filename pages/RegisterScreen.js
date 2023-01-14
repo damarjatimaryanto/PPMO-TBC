@@ -1,5 +1,7 @@
 import {
+  FlatList,
   StyleSheet,
+  ActivityIndicator,
   TouchableOpacity,
   Text,
   Image,
@@ -7,18 +9,27 @@ import {
   Animated,
   Alert,
   Dimensions,
+  Modal
 } from 'react-native';
-import React, {useRef, useEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useRef, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNSettings from 'react-native-settings';
-import {TextInput} from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import SelectDropdown from 'react-native-select-dropdown';
+import { useState } from 'react';
 
-const countries = ['Fase Intensif (Ke 1)', 'Fase Lanjutan ( Ke 2)'];
+const countries = [
+  {
+    id: 1, fase: 'Fase Intensif (Ke 1)'
+  },
+  {
+    id: 2, fase: 'Fase Lanjutan ( Ke 2)'
+  }
+];
 const kategori = ['Pasien Baru', 'Pasien Lama'];
 
 const blue = '#0D4AA7';
@@ -28,12 +39,163 @@ const grey = '#5C5F68';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
-const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
+const COLORS = { primary: '#1E319D', white: '#FFFFFF' };
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
+  const [modal, setModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [dataKat, setDataKat] = useState([]);
+  const [dataFase, setDataFase] = useState([]);
+
+  const [nama, setNama] = useState();
+  const [fase, setFase] = useState();
+  const [faseLabel, setFaseLabel] = useState('Fase Insentif');
+  const [kat, setKat] = useState();
+  const [katLabel, setKatLabel] = useState();
+
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+
+  useEffect(() => {
+    getKategori();
+    getFase();
+  }, []);
+
+  const getKategori = () => {
+    fetch('https://afanalfiandi.com/ppmo/api/api.php?op=getKategori', {})
+      .then((res) => res.json())
+      .then((response) => {
+        setDataKat(response);
+      })
+  }
+
+  const getFase = () => {
+    fetch('https://afanalfiandi.com/ppmo/api/api.php?op=getFase', {})
+      .then((res) => res.json())
+      .then((response) => {
+        setDataFase(response);
+      })
+  }
+  const onSubmit = async () => {
+    fetch('https://afanalfiandi.com/ppmo/api/api.php?op=register', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nama: nama,
+        kategori: kat,
+        fase: fase,
+        username: username,
+        password: password
+      })
+    }).then((res) => res.json())
+      .then((response) => {
+        setLoading(true);
+        setTimeout(() => {
+          if (response == 1) {
+            Alert.alert('', 'Registrasi Berhasil!');
+            navigation.navigate('LoginScreen');
+          } else {
+            Alert.alert('', 'Registrasi Gagal!');
+          }
+        }, 3000);
+      })
+  }
+
+  const renderItem = ({ item }) => (
+    <View>
+      <TouchableOpacity onPress={() => {
+        setKat(item.id_kategori_detail);
+        setKatLabel(item.kategori);
+        setFase('1');
+        setModalVisible(false);
+      }}>
+        <Text>{item.kategori}</Text>
+      </TouchableOpacity>
+
+    </View>
+  );
+  const renderFase = ({ item }) => (
+    <View>
+      <TouchableOpacity onPress={() => {
+        setFase(item.id_fase_detail);
+        setFaseLabel(item.fase);
+        setModal(false);
+      }}>
+        <Text>{item.fase}</Text>
+      </TouchableOpacity>
+
+    </View>
+  );
+
   return (
     <View style={styles.container}>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <FlatList
+              data={dataKat}
+              renderItem={renderItem}
+              keyExtractor={item => item.id_kategori_detail}
+            />
+            <TouchableOpacity onPress={() => { setModalVisible(false) }}>
+              <Text>Tutup</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modal}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModal(!modal);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <FlatList
+              data={dataFase}
+              renderItem={renderFase}
+              keyExtractor={item => item.id_fase_detail}
+            />
+            <TouchableOpacity onPress={() => { setModal(false) }}>
+              <Text>Tutup</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={loading}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModal(!modal);
+        }}
+      >
+          <View style={{ position: 'absolute', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+              <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+      </Modal>
+
+
       <View style={styles.imgContainer}>
         <Text
           style={{
@@ -46,12 +208,15 @@ const RegisterScreen = () => {
       </View>
 
       <View style={styles.formContainer}>
+
         <View style={styles.inputContainer}>
           <Text style={styles.h2}>Nama Lengkap :</Text>
 
           <TextInput
             style={styles.input}
             placeholderTextColor={grey}
+            onChangeText={setNama}
+            value={nama}
             placeholder="Masukkan Nama Lengkap Anda"></TextInput>
         </View>
         <View style={styles.inputContainer}>
@@ -60,6 +225,8 @@ const RegisterScreen = () => {
           <TextInput
             style={styles.input}
             placeholderTextColor={grey}
+            onChangeText={setUsername}
+            value={username}
             placeholder="Masukkan Username"></TextInput>
         </View>
 
@@ -68,14 +235,61 @@ const RegisterScreen = () => {
 
           <TextInput
             style={styles.input}
+            secureTextEntry={true}
             placeholderTextColor={grey}
+            onChangeText={setPassword}
+            value={password}
             placeholder="Masukkan Password"></TextInput>
         </View>
-
         <View style={styles.inputContainer}>
           <Text style={styles.h2}>Kategori Pasien :</Text>
+          <TouchableOpacity
+            onPress={() => setModalVisible(true)}
+            style={[styles.input, { alignItems: 'flex-start' }]}>
+            {kat == null && (
+              <Text style={{
+                fontSize: 16,
+                color: 'grey',
+                fontFamily: 'Poppins-Regular',
+              }}>Pilih Kategori Pasien</Text>
+            )}
+            {kat != null && (
+              <Text style={{
+                fontSize: 16,
+                color: 'grey',
+                fontFamily: 'Poppins-Regular',
+              }}>{katLabel}</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+
+        {kat == 2 && (
+          <View style={styles.inputContainer}>
+            <Text style={styles.h2}>Fase Pengobatan :</Text>
+            <TouchableOpacity
+              onPress={() => setModal(true)}
+              style={[styles.input, { alignItems: 'flex-start' }]}>
+              {fase == null && (
+                <Text style={{
+                  fontSize: 16,
+                  color: 'grey',
+                  fontFamily: 'Poppins-Regular',
+                }}>Pilih Fase Pengobatan</Text>
+              )}
+              {fase != null && (
+                <Text style={{
+                  fontSize: 16,
+                  color: 'grey',
+                  fontFamily: 'Poppins-Regular',
+                }}>{faseLabel}</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        )}
+        {/* <View style={styles.inputContainer}>
+          <Text style={styles.h2}>Kategori Pasien :</Text>
           <SelectDropdown
-            data={kategori}
+            data={countries}
             onSelect={(selectedItem, index) => {
               console.log(selectedItem, index);
             }}
@@ -93,7 +307,7 @@ const RegisterScreen = () => {
             renderDropdownIcon={isOpened => {
               return (
                 <Image
-                  style={{width: 20, height: 10}}
+                  style={{ width: 20, height: 10 }}
                   source={
                     isOpened
                       ? require('./../assets/img/icon/down.png')
@@ -114,7 +328,7 @@ const RegisterScreen = () => {
         <View style={styles.inputContainer}>
           <Text style={styles.h2}>Fase Pengobatan :</Text>
           <SelectDropdown
-            data={kategori}
+            data={countries}
             onSelect={(selectedItem, index) => {
               console.log(selectedItem, index);
             }}
@@ -132,7 +346,7 @@ const RegisterScreen = () => {
             renderDropdownIcon={isOpened => {
               return (
                 <Image
-                  style={{width: 20, height: 10}}
+                  style={{ width: 20, height: 10 }}
                   source={
                     isOpened
                       ? require('./../assets/img/icon/down.png')
@@ -148,17 +362,19 @@ const RegisterScreen = () => {
             rowStyle={styles.rowstyle}
             rowTextStyle={styles.rowtext}
           />
-        </View>
+        </View> */}
 
         <View style={styles.btn_Container}>
           <TouchableOpacity
             style={styles.submitBtn}
-            onPress={() => navigation.navigate('LoginScreen')}>
+            onPress={() => {
+              onSubmit();
+            }}>
             <Text style={styles.btnText}>Buat Akun</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </View >
   );
 };
 
@@ -270,4 +486,44 @@ const styles = StyleSheet.create({
     color: '#F7B44C',
     fontWeight: 'bold',
   },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  modalView: {
+    margin: 21,
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });

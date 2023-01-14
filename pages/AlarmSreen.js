@@ -1,6 +1,7 @@
 import {
   StyleSheet,
   Modal,
+  ActivityIndicator,
   Pressable,
   PermissionsAndroid,
   Text,
@@ -16,19 +17,21 @@ import {
   Dimensions,
   BackHandler,
 } from 'react-native';
-import React, {useRef, useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useRef, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SelectDropdown from 'react-native-select-dropdown';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from 'moment';
 
 const countries = ['Fase Intensif (Ke 1)', 'Fase Lanjutan ( Ke 2)'];
 const kategori = ['Pasien Baru', 'Pasien Lama'];
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
-const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
+const COLORS = { primary: '#1E319D', white: '#FFFFFF' };
 const blue = '#0D4AA7';
 const black = '#3d3d3d';
 const red = '#C74B4C';
@@ -37,31 +40,155 @@ const AlarmScreen = () => {
   const navigation = useNavigation();
   const [modal, setModal] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
+  const [userData, setUserData] = useState([
+    {
+      fase: '',
+      kategori: '',
+      id_kat: '',
+      id_fase: '',
+    }
+  ]);
+  const [hari, setHari] = useState();
+  const [jam, setJam] = useState('00:00');
 
-  const onSubmit = () => {
+
+  const onSubmit = async () => {
+    const id_user = await AsyncStorage.getItem('uid');
+
+    fetch('https://afanalfiandi.com/ppmo/api/api.php?op=insAlarm', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: id_user,
+        hari: hari,
+        jam: jam,
+      })
+    }).then((res) => res.json())
+      .then((resp) => {
+        setLoading(true);
+        setTimeout(() => {
+          if (resp == 1) {
+            Alert.alert('', 'Alarm berhasil ditambahkan');
+            setLoading(false);
+            getAlarm();
+          } else {
+            Alert.alert('', 'Alarm gagal ditambahkan');
+            setLoading(false);
+          }
+        }, 2000);
+      })
     setModal(false);
   };
 
-  const showTimePicker = () => {
-    setDatePickerVisibility(true);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisible(true);
   };
 
-  const hideTimePicker = () => {
-    setDatePickerVisibility(false);
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
   };
 
-  const handleTimeConfirm = date => {
-    console.warn('A Time has been picked: ', date);
+  const handleConfirm = (date) => {
+    const time = moment(date).format('HH:mm');
+    setJam(time);
+
     hideDatePicker();
   };
+
+
+  const getAlarm = async () => {
+    const uid = await AsyncStorage.getItem('uid');
+
+    fetch('https://afanalfiandi.com/ppmo/api/api.php?op=getAlarm', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: uid,
+      })
+    }).then((res) => res.json())
+      .then((resp) => {
+        setLoading(true);
+        setTimeout(async () => {
+          const fase = await AsyncStorage.getItem('fase');
+          const kategori = await AsyncStorage.getItem('kategori');
+          const id_kat = await AsyncStorage.getItem('id_kat');
+          const id_fase = await AsyncStorage.getItem('id_fase');
+
+          const userSession = [];
+          userSession.push({
+            fase: fase,
+            kategori: kategori,
+            id_kat: id_kat,
+            id_fase: id_fase,
+          });
+
+          setUserData(userSession);
+          if (resp != 0) {
+            const id_alarm = resp.id_alarm;
+            const id_user = resp.id_user;
+            const jam = resp.jam;
+            const hari = resp.hari;
+
+            const result = [];
+            result.push({
+              id_alarm: id_alarm,
+              id_user: id_user,
+              jam: jam,
+              hari: hari,
+            });
+
+            setData(result);
+            setLoading(false);
+
+          } else {
+            setData(null);
+            setLoading(false);
+          }
+
+          console.log(data);
+
+        }, 2000);
+
+
+      })
+  }
+
+  useEffect(() => {
+    getAlarm();
+  }, [])
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { padding: 15 }]}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={loading}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModal(false);
+        }}
+      >
+        <View style={{ position: 'absolute', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+      </Modal>
       <DateTimePickerModal
-        isVisible={isDatePickerVisible}
+        date={selectedDate}
+        isVisible={datePickerVisible}
         mode="time"
         is24Hour
-        onConfirm={handleTimeConfirm}
-        onCancel={hideTimePicker}
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
       />
       <Modal
         animationType="slide"
@@ -74,50 +201,51 @@ const AlarmScreen = () => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.inputhorizontal}>
-              <TextInput
-                style={styles.input_horizontal}
-                placeholderTextColor={grey}
-                keyboardType="number-pad"
-                placeholder="13 : 30"
-              />
-              <TouchableOpacity
-                onPress={showTimePicker}
-                style={{
-                  width: 43,
-                  height: 43,
-                  backgroundColor: COLORS.primary,
-                  borderRadius: 5,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  style={{width: '80%', height: '80%'}}
-                  source={require('./../assets/img/icon/alarm_plus.png')}
-                />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.inputhorizontal}>
-              <TextInput
-                style={styles.input_horizontal}
-                placeholderTextColor={grey}
-                keyboardType="number-pad"
-                placeholder="0"
-              />
               <Text
                 style={{
                   color: 'grey',
                   fontFamily: 'Poppins-Medium',
                   fontSize: 16,
                 }}>
-                Hari
+                Jam
               </Text>
-            </View>
+              <TouchableOpacity
+                onPress={showDatePicker}
+                style={[styles.input_horizontal, { alignItems: 'flex-start' }]}
+              >
+                <Text style={{
+                  color: 'grey',
+                  fontFamily: 'Poppins-Medium',
+                  fontSize: 16,
+                }}>{jam}</Text>
+              </TouchableOpacity>
 
+
+            </View>
+            <View style={styles.inputhorizontal}>
+              <Text
+                style={{
+                  color: 'grey',
+                  fontFamily: 'Poppins-Medium',
+                  fontSize: 16,
+                }}>
+                Hari Ke-
+              </Text>
+              <TextInput
+                style={[styles.input_horizontal, { opacity: userData[0].id_kat == 1 ? 0.6 : 1 }]}
+                placeholderTextColor={grey}
+                keyboardType="number-pad"
+                placeholder="0"
+                onChangeText={setHari}
+                value={userData[0].id_kat == 1 ? '1' : hari}
+                editable={userData[0].id_kat == 1 ? false : true}
+              />
+
+            </View>
             <View
               style={[
                 styles.inputhorizontal,
-                {justifyContent: 'space-between'},
+                { justifyContent: 'space-between' },
               ]}>
               <TouchableOpacity
                 style={[styles.btn, styles.btn2]}
@@ -125,7 +253,7 @@ const AlarmScreen = () => {
                   setModal(false);
                 }}>
                 <Text
-                  style={{color: COLORS.white, fontFamily: 'Poppins-Medium'}}>
+                  style={{ color: COLORS.white, fontFamily: 'Poppins-Medium' }}>
                   Batal
                 </Text>
               </TouchableOpacity>
@@ -135,7 +263,7 @@ const AlarmScreen = () => {
                   onSubmit();
                 }}>
                 <Text
-                  style={[{color: COLORS.white, fontFamily: 'Poppins-Medium'}]}>
+                  style={[{ color: COLORS.white, fontFamily: 'Poppins-Medium' }]}>
                   Simpan
                 </Text>
               </TouchableOpacity>
@@ -143,104 +271,82 @@ const AlarmScreen = () => {
           </View>
         </View>
       </Modal>
-      <View style={styles.box}>
-        <View style={styles.jam}>
-          <Text
-            style={{
-              fontFamily: 'Poppins-SemiBold',
-              fontSize: 30,
-              color: 'white',
-            }}>
-            13 : 30
-          </Text>
-        </View>
-        <View style={styles.keterangan}>
-          <Text
-            style={{
-              fontFamily: 'Poppins-Bold',
-              fontSize: 20,
-              color: 'white',
-            }}>
-            Pasien Baru
-          </Text>
-          <Text
-            style={{
-              fontFamily: 'Poppins-Regular',
-              fontSize: 16,
-              color: 'white',
-            }}>
-            Fase Intensif
-          </Text>
-        </View>
-        <View style={styles.gmbar_container}>
-          <Image
-            style={{width: 50, height: 50}}
-            source={require('./../assets/img/icon/bell_miss.png')}
-          />
-        </View>
-      </View>
-      <View style={styles.box}>
-        <View style={styles.jam}>
-          <Text
-            style={{
-              fontFamily: 'Poppins-SemiBold',
-              fontSize: 30,
-              color: 'white',
-            }}>
-            18 : 15
-          </Text>
-        </View>
-        <View style={styles.keterangan}>
-          <Text
-            style={{
-              fontFamily: 'Poppins-Bold',
-              fontSize: 20,
-              color: 'white',
-            }}>
-            Pasien Lama
-          </Text>
-          <Text
-            style={{
-              fontFamily: 'Poppins-Regular',
-              fontSize: 16,
-              color: 'white',
-            }}>
-            Fase Lanjutan
-          </Text>
-        </View>
-        <View style={styles.gmbar_container}>
-          <Image
-            style={{width: 50, height: 50}}
-            source={require('./../assets/img/icon/bell_check.png')}
-          />
-        </View>
-      </View>
 
-      <TouchableOpacity
-        style={styles.floatingbutton}
-        onPress={() => {
-          setModal(true);
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              fontSize: 16,
-              color: 'white',
-              margin: 10,
-              fontFamily: 'Poppins-Medium',
-            }}>
-            Tambah
+      {/* jika loading selesai dan tidak ada data alarm */}
+
+      {loading != true && data == null && (
+        <View style={{ justifyContent: 'center', alignItems: 'center', height: 200, width: '90%', paddingHorizontal: 10 }}>
+          <Text style={{ color: COLORS.primary, fontSize: 20 }}>
+            Ayo Mulai!
           </Text>
-          <Image
-            style={{width: 24, height: 24}}
-            source={require('./../assets/img/icon/alarm_plus.png')}></Image>
+          <Text style={{ color: 'grey', fontSize: 16, textAlign: 'center' }}>
+            Mulai untuk membuat notifikasi alam untuk memengingatkan anda meminum obat
+          </Text>
+          <TouchableOpacity
+            style={[styles.floatingbutton, { marginTop: 20 }]}
+            onPress={() => {
+              setModal(true);
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text style={{ fontSize: 16, color: 'white', margin: 10, fontFamily: 'Poppins-Medium', }}>
+                Tambah Alarm
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+      )}
+
+      {/* jika loading selesai dan  ada data alarm */}
+      {loading != true && data != null && (
+        <View>
+          <View style={styles.box}>
+            <View style={styles.jam}>
+              <Text
+                style={{
+                  fontFamily: 'Poppins-SemiBold',
+                  fontSize: 30,
+                  color: 'white',
+                }}>
+                {data[0].jam}
+              </Text>
+            </View>
+            <View style={styles.keterangan}>
+              <Text
+                style={{
+                  fontFamily: 'Poppins-Bold',
+                  fontSize: 20,
+                  color: 'white',
+                }}>
+                {userData[0].kategori}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Poppins-Regular',
+                  fontSize: 16,
+                  color: 'white',
+                }}>
+                {userData[0].fase}
+              </Text>
+            </View>
+            <View style={styles.gmbar_container}>
+              <Image
+                style={{ width: 50, height: 50 }}
+                source={require('./../assets/img/icon/bell_check.png')}
+              />
+
+              {/* <Image
+                style={{ width: 50, height: 50 }}
+                source={require('./../assets/img/icon/bell_miss.png')}
+              /> */}
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -251,7 +357,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#EAEAEA',
-
     alignItems: 'center',
   },
   btn: {
@@ -270,17 +375,17 @@ const styles = StyleSheet.create({
   floatingbutton: {
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'absolute',
-    bottom: 90,
-    right: 20,
-    width: 120,
+    // position: 'absolute',
+    // bottom: 90,
+    // right: 20,
+    width: '80%',
     backgroundColor: COLORS.primary,
     borderRadius: 10,
   },
   box: {
     backgroundColor: COLORS.primary,
     height: 100,
-    width: '90%',
+    width: '95%',
     borderRadius: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -303,6 +408,7 @@ const styles = StyleSheet.create({
   },
   keterangan: {
     // backgroundColor: 'grey',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -343,9 +449,11 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     width: '100%',
     marginVertical: 10,
   },
+
   btn_Container: {
     marginVertical: 15,
   },
@@ -362,9 +470,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     fontSize: 16,
     fontFamily: 'Poppins-Regular',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  input_horizontal_2: {
+    // borderWidth: 2,
+    // borderColor: COLORS.primary,
+    backgroundColor: COLORS.primary,
+    paddingVertical: width * 0.013,
+    paddingHorizontal: width * 0.04,
+    width: '82%',
+    height: 45,
+    borderRadius: 5,
+
+    fontSize: 16,
+    fontFamily: 'Poppins-Regular',
     marginRight: 20,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row'
   },
 
   btn: {

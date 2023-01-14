@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -8,9 +8,9 @@ import {
   Alert,
   StatusBar,
 } from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Calendar, CalendarList} from 'react-native-calendars';
-const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Calendar, CalendarList } from 'react-native-calendars';
+const COLORS = { primary: '#1E319D', white: '#FFFFFF' };
 export class TrackScreen extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +22,22 @@ export class TrackScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Calendar
+
+
+
+        <View style={{ justifyContent: 'center', alignItems: 'center', height: 200, width: '90%', paddingHorizontal: 10 }}>
+          <Text style={{ color: COLORS.primary, fontSize: 20 }}>
+            Lihat dan Amati
+
+          </Text>
+          <Text style={{ color: 'grey', fontSize: 16, textAlign: 'center' }}>
+            Track record anda akan tampil disini
+
+          </Text>
+        </View>
+
+
+        {/* <Calendar
           style={{backgroundColor: COLORS.white}}
           theme={{
             backgroundColor: COLORS.white,
@@ -52,27 +67,7 @@ export class TrackScreen extends Component {
           }}
           markingType={'period'}
           markedDates={{
-            '2023-01-01': {
-              disabled: true,
-              startingDay: true,
-              color: '#FF6A6A',
-              endingDay: true,
-              textColor: 'white',
-            },
-            '2023-01-02': {
-              disabled: true,
-              startingDay: true,
-              color: COLORS.primary,
-              endingDay: true,
-              textColor: 'white',
-            },
-            '2023-01-03': {
-              disabled: true,
-              startingDay: true,
-              color: COLORS.primary,
-              endingDay: true,
-              textColor: 'white',
-            },
+            
             '2023-01-04': {
               disabled: true,
               startingDay: true,
@@ -87,27 +82,7 @@ export class TrackScreen extends Component {
               endingDay: true,
               textColor: 'white',
             },
-            '2023-01-06': {
-              disabled: true,
-              startingDay: true,
-              color: COLORS.primary,
-              endingDay: true,
-              textColor: 'white',
-            },
-            '2023-01-07': {
-              disabled: true,
-              startingDay: true,
-              color: '#48CDF8',
-              endingDay: true,
-              textColor: 'white',
-            },
-            '2023-01-08': {
-              disabled: true,
-              startingDay: true,
-              color: 'red',
-              endingDay: true,
-              textColor: 'white',
-            },
+
           }}
         />
         <View style={styles.keterangan}>
@@ -131,7 +106,7 @@ export class TrackScreen extends Component {
               marginRight: 20,
             }}></View>
           <Text style={styles.judulketerangan}>Tidak Minum Obat</Text>
-        </View>
+        </View> */}
       </View>
     );
   }
@@ -143,6 +118,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   keterangan: {
     flexDirection: 'row',
