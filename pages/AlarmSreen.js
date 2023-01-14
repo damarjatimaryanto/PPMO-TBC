@@ -17,21 +17,22 @@ import {
   Dimensions,
   BackHandler,
 } from 'react-native';
-import React, { useRef, useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, {useRef, useEffect, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SelectDropdown from 'react-native-select-dropdown';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
+import PushNotification from 'react-native-push-notification';
 
 const countries = ['Fase Intensif (Ke 1)', 'Fase Lanjutan ( Ke 2)'];
 const kategori = ['Pasien Baru', 'Pasien Lama'];
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
-const COLORS = { primary: '#1E319D', white: '#FFFFFF' };
+const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 const blue = '#0D4AA7';
 const black = '#3d3d3d';
 const red = '#C74B4C';
@@ -48,11 +49,10 @@ const AlarmScreen = () => {
       kategori: '',
       id_kat: '',
       id_fase: '',
-    }
+    },
   ]);
   const [hari, setHari] = useState();
   const [jam, setJam] = useState('00:00');
-
 
   const onSubmit = async () => {
     const id_user = await AsyncStorage.getItem('uid');
@@ -61,15 +61,16 @@ const AlarmScreen = () => {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         id: id_user,
         hari: hari,
         jam: jam,
-      })
-    }).then((res) => res.json())
-      .then((resp) => {
+      }),
+    })
+      .then(res => res.json())
+      .then(resp => {
         setLoading(true);
         setTimeout(() => {
           if (resp == 1) {
@@ -81,7 +82,7 @@ const AlarmScreen = () => {
             setLoading(false);
           }
         }, 2000);
-      })
+      });
     setModal(false);
   };
 
@@ -96,13 +97,12 @@ const AlarmScreen = () => {
     setDatePickerVisible(false);
   };
 
-  const handleConfirm = (date) => {
+  const handleConfirm = date => {
     const time = moment(date).format('HH:mm');
     setJam(time);
 
     hideDatePicker();
   };
-
 
   const getAlarm = async () => {
     const uid = await AsyncStorage.getItem('uid');
@@ -111,13 +111,14 @@ const AlarmScreen = () => {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         id: uid,
-      })
-    }).then((res) => res.json())
-      .then((resp) => {
+      }),
+    })
+      .then(res => res.json())
+      .then(resp => {
         setLoading(true);
         setTimeout(async () => {
           const fase = await AsyncStorage.getItem('fase');
@@ -150,35 +151,59 @@ const AlarmScreen = () => {
 
             setData(result);
             setLoading(false);
-
           } else {
             setData(null);
             setLoading(false);
           }
 
           console.log(data);
-
         }, 2000);
+      });
+  };
 
+  const createChannels = () => {
+    PushNotification.createChannel({
+      channelId: 'test-channel',
+      channelName: 'Test Channel',
+      vibrate: true,
+      vibration: 300,
+      priority: 'high',
+      onlyAlertOnce: false,
+      playSound: true,
+      sound: 'alarm.mp3',
+    });
+  };
 
-      })
-  }
-
+  const handleNotification = () => {
+    PushNotification.localNotification({
+      channelId: 'test-channel',
+      channelName: 'Test Channel',
+      message: 'asdadasd',
+    });
+  };
   useEffect(() => {
     getAlarm();
-  }, [])
+    // createChannels();
+    handleNotification();
+  }, []);
   return (
-    <View style={[styles.container, { padding: 15 }]}>
+    <View style={[styles.container, {padding: 15}]}>
       <Modal
         animationType="fade"
         transparent={true}
         visible={loading}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          Alert.alert('Modal has been closed.');
           setModal(false);
-        }}
-      >
-        <View style={{ position: 'absolute', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+        }}>
+        <View
+          style={{
+            position: 'absolute',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            width: '100%',
+          }}>
           <ActivityIndicator size="large" color={COLORS.primary} />
         </View>
       </Modal>
@@ -211,16 +236,16 @@ const AlarmScreen = () => {
               </Text>
               <TouchableOpacity
                 onPress={showDatePicker}
-                style={[styles.input_horizontal, { alignItems: 'flex-start' }]}
-              >
-                <Text style={{
-                  color: 'grey',
-                  fontFamily: 'Poppins-Medium',
-                  fontSize: 16,
-                }}>{jam}</Text>
+                style={[styles.input_horizontal, {alignItems: 'flex-start'}]}>
+                <Text
+                  style={{
+                    color: 'grey',
+                    fontFamily: 'Poppins-Medium',
+                    fontSize: 16,
+                  }}>
+                  {jam}
+                </Text>
               </TouchableOpacity>
-
-
             </View>
             <View style={styles.inputhorizontal}>
               <Text
@@ -232,7 +257,10 @@ const AlarmScreen = () => {
                 Hari Ke-
               </Text>
               <TextInput
-                style={[styles.input_horizontal, { opacity: userData[0].id_kat == 1 ? 0.6 : 1 }]}
+                style={[
+                  styles.input_horizontal,
+                  {opacity: userData[0].id_kat == 1 ? 0.6 : 1},
+                ]}
                 placeholderTextColor={grey}
                 keyboardType="number-pad"
                 placeholder="0"
@@ -240,12 +268,11 @@ const AlarmScreen = () => {
                 value={userData[0].id_kat == 1 ? '1' : hari}
                 editable={userData[0].id_kat == 1 ? false : true}
               />
-
             </View>
             <View
               style={[
                 styles.inputhorizontal,
-                { justifyContent: 'space-between' },
+                {justifyContent: 'space-between'},
               ]}>
               <TouchableOpacity
                 style={[styles.btn, styles.btn2]}
@@ -253,7 +280,7 @@ const AlarmScreen = () => {
                   setModal(false);
                 }}>
                 <Text
-                  style={{ color: COLORS.white, fontFamily: 'Poppins-Medium' }}>
+                  style={{color: COLORS.white, fontFamily: 'Poppins-Medium'}}>
                   Batal
                 </Text>
               </TouchableOpacity>
@@ -263,7 +290,7 @@ const AlarmScreen = () => {
                   onSubmit();
                 }}>
                 <Text
-                  style={[{ color: COLORS.white, fontFamily: 'Poppins-Medium' }]}>
+                  style={[{color: COLORS.white, fontFamily: 'Poppins-Medium'}]}>
                   Simpan
                 </Text>
               </TouchableOpacity>
@@ -275,15 +302,38 @@ const AlarmScreen = () => {
       {/* jika loading selesai dan tidak ada data alarm */}
 
       {loading != true && data == null && (
-        <View style={{ justifyContent: 'center', alignItems: 'center', height: 200, width: '90%', paddingHorizontal: 10 }}>
-          <Text style={{ color: COLORS.primary, fontSize: 20 }}>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingTop: '30%',
+            width: '90%',
+            paddingHorizontal: 10,
+          }}>
+          <Image
+            style={{width: 200, height: 157}}
+            source={require('./../assets/img/icon/illus_alarm.png')}
+          />
+          <Text
+            style={{
+              color: COLORS.primary,
+              fontSize: 20,
+              fontFamily: 'Poppins-Medium',
+            }}>
             Ayo Mulai!
           </Text>
-          <Text style={{ color: 'grey', fontSize: 16, textAlign: 'center' }}>
-            Mulai untuk membuat notifikasi alam untuk memengingatkan anda meminum obat
+          <Text
+            style={{
+              color: 'grey',
+              fontSize: 16,
+              textAlign: 'center',
+              fontFamily: 'Poppins-LightItalic',
+            }}>
+            Mulai untuk membuat notifikasi alarm untuk memengingatkan anda
+            meminum obat
           </Text>
           <TouchableOpacity
-            style={[styles.floatingbutton, { marginTop: 20 }]}
+            style={[styles.floatingbutton, {marginTop: 20}]}
             onPress={() => {
               setModal(true);
             }}>
@@ -293,7 +343,13 @@ const AlarmScreen = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text style={{ fontSize: 16, color: 'white', margin: 10, fontFamily: 'Poppins-Medium', }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: 'white',
+                  margin: 10,
+                  fontFamily: 'Poppins-Medium',
+                }}>
                 Tambah Alarm
               </Text>
             </View>
@@ -335,7 +391,7 @@ const AlarmScreen = () => {
             </View>
             <View style={styles.gmbar_container}>
               <Image
-                style={{ width: 50, height: 50 }}
+                style={{width: 50, height: 50}}
                 source={require('./../assets/img/icon/bell_check.png')}
               />
 
@@ -489,7 +545,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
 
   btn: {

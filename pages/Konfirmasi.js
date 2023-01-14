@@ -23,14 +23,18 @@ const actions = [
   },
 ];
 
-const Alarm = () => {
+const Konfirmasi = () => {
   const navigation = useNavigation();
   const [shouldShow, setShouldShow] = useState(true);
 
-  return <View style={styles.container}></View>;
+  return (
+    <View style={styles.container}>
+      <Text style={{color: 'black'}}>Ini Halaman Konfirmasi</Text>
+    </View>
+  );
 };
 
-export default Alarm;
+export default Konfirmasi;
 
 const styles = StyleSheet.create({
   container: {

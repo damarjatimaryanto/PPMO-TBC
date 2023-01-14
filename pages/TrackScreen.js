@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   View,
@@ -8,9 +8,9 @@ import {
   Alert,
   StatusBar,
 } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Calendar, CalendarList } from 'react-native-calendars';
-const COLORS = { primary: '#1E319D', white: '#FFFFFF' };
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Calendar, CalendarList} from 'react-native-calendars';
+const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 export class TrackScreen extends Component {
   constructor(props) {
     super(props);
@@ -22,20 +22,38 @@ export class TrackScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Image
+          style={{width: 250, height: 138}}
+          source={require('./../assets/img/icon/illus_calendar.png')}
+        />
 
-
-
-        <View style={{ justifyContent: 'center', alignItems: 'center', height: 200, width: '90%', paddingHorizontal: 10 }}>
-          <Text style={{ color: COLORS.primary, fontSize: 20 }}>
-            Lihat dan Amati
-
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 200,
+            width: '90%',
+            paddingHorizontal: 10,
+          }}>
+          <Text
+            style={{
+              color: COLORS.primary,
+              fontSize: 20,
+              fontFamily: 'Poppins-Medium',
+            }}>
+            Melihat progress anda dengan mudah
           </Text>
-          <Text style={{ color: 'grey', fontSize: 16, textAlign: 'center' }}>
-            Track record anda akan tampil disini
-
+          <Text
+            style={{
+              color: 'grey',
+              fontSize: 16,
+              textAlign: 'center',
+              fontFamily: 'Poppins-LightItalic',
+            }}>
+            Track record harian anda dalam kepatuhan meminum obat akan muncul
+            disini.
           </Text>
         </View>
-
 
         {/* <Calendar
           style={{backgroundColor: COLORS.white}}
@@ -117,9 +135,9 @@ export default TrackScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#EAEAEA',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   keterangan: {
     flexDirection: 'row',
