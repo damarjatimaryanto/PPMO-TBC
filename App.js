@@ -24,7 +24,7 @@ import Akun from './pages/Akun';
 import AkunScreen from './pages/AkunScreen';
 import Konfirmasi from './pages/Konfirmasi';
 
-const COLORS = {primary: '#225AEB', white: '#FFFFFF'};
+const COLORS = {primary: '#1E319D', white: '#FFFFFF', abu1: '#F6F6F6'};
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -67,7 +67,19 @@ const App = () => {
           component={RegisterScreen}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="Konfirmasi" component={Konfirmasi} />
+        <Stack.Screen
+          name="Konfirmasi"
+          component={Konfirmasi}
+          options={{
+            headerStyle: {backgroundColor: COLORS.primary},
+            headerTitleStyle: {
+              fontSize: 20,
+              fontFamily: 'Poppins-Medium',
+              color: COLORS.white,
+            },
+            headerTintColor: COLORS.white,
+          }}
+        />
         <Stack.Screen
           name="BuatalarmScreen"
           component={BuatalarmScreen}
@@ -89,7 +101,10 @@ export function Tab1() {
         headerTitleStyle: {
           fontSize: 20,
           fontFamily: 'Poppins-Medium',
-          color: COLORS.primary,
+          color: COLORS.white,
+        },
+        headerStyle: {
+          backgroundColor: COLORS.primary,
         },
         headerTitleAlign: 'center',
         tabBarHideOnKeyboard: true,
@@ -116,7 +131,11 @@ export function Tab1() {
             return (
               <View style={styles.buttonicon}>
                 <Image
-                  source={require('./assets/img/icon/bell.png')}
+                  source={
+                    focused
+                      ? require('./assets/img/icon/bell_fill.png')
+                      : require('./assets/img/icon/bell.png')
+                  }
                   resizeMode="contain"
                   style={{
                     alignItems: 'center',
@@ -148,7 +167,11 @@ export function Tab1() {
             return (
               <View style={styles.buttonicon}>
                 <Image
-                  source={require('./assets/img/icon/progress.png')}
+                  source={
+                    focused
+                      ? require('./assets/img/icon/chart_fill.png')
+                      : require('./assets/img/icon/chart.png')
+                  }
                   resizeMode="contain"
                   style={{
                     alignItems: 'center',
@@ -181,7 +204,11 @@ export function Tab1() {
             return (
               <View style={styles.buttonicon}>
                 <Image
-                  source={require('./assets/img/icon/account.png')}
+                  source={
+                    focused
+                      ? require('./assets/img/icon/person_fill.png')
+                      : require('./assets/img/icon/person.png')
+                  }
                   resizeMode="contain"
                   style={{
                     width: 25,

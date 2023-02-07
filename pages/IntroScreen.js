@@ -11,8 +11,6 @@ import {
 import React, {useRef, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import RNSettings from 'react-native-settings';
-import Home from './Home';
 
 const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 const IntroScreen = () => {
@@ -28,17 +26,17 @@ const IntroScreen = () => {
   };
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <View style={styles.logo_container}>
         <Image
           style={{width: 90, height: 73}}
-          source={require('../assets/img/icon/logoobat_biru.png')}></Image>
+          source={require('../assets/img/icon/logoobat.png')}></Image>
       </View>
       <View style={{width: '100%', height: '20%', alignItems: 'center'}}>
         <Text
           style={{
-            fontFamily: 'Poppins-SemiBold',
-            color: COLORS.primary,
+            fontFamily: 'Poppins-Medium',
+            color: COLORS.white,
             fontSize: 40,
             marginTop: 20,
             textAlign: 'center',
@@ -56,7 +54,12 @@ const IntroScreen = () => {
             onStart();
           }}>
           <Text
-            style={{fontSize: 20, fontWeight: 'bold', color: COLORS.primary}}>
+            style={{
+              fontSize: 20,
+              // fontWeight: 'bold',
+              color: COLORS.primary,
+              fontFamily: 'Poppins-Medium',
+            }}>
             Mulai
           </Text>
         </TouchableOpacity>
@@ -70,7 +73,7 @@ export default IntroScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.primary,
 
     alignItems: 'center',
   },
@@ -90,13 +93,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
   },
   subtitle: {
-    color: 'grey',
+    color: 'white',
     fontSize: 16,
     marginTop: 10,
     maxWidth: '90%',
     textAlign: 'center',
     // lineHeight: 23,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-LightItalic',
   },
   title: {
     color: COLORS.primary,
@@ -107,13 +110,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
   },
   btn: {
-    borderRadius: 5,
+    borderRadius: 13,
     height: 50,
-    width: 120,
+    width: 200,
     borderColor: COLORS.primary,
     borderWidth: 3,
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
+    fontFamily: 'Poppins-Regular',
   },
 });

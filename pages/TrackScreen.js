@@ -36,9 +36,10 @@ export class TrackScreen extends Component {
             paddingHorizontal: 10,
           }}>
           <Text
+            resizeMode="contain"
             style={{
               color: COLORS.primary,
-              fontSize: 20,
+              fontSize: 16,
               fontFamily: 'Poppins-Medium',
             }}>
             Melihat progress anda dengan mudah
@@ -46,7 +47,7 @@ export class TrackScreen extends Component {
           <Text
             style={{
               color: 'grey',
-              fontSize: 16,
+              fontSize: 14,
               textAlign: 'center',
               fontFamily: 'Poppins-LightItalic',
             }}>
@@ -135,7 +136,7 @@ export default TrackScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EAEAEA',
+    backgroundColor: '#F6F6F6',
     justifyContent: 'center',
     alignItems: 'center',
   },

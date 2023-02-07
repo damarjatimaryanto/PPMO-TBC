@@ -8,12 +8,12 @@ import {
   Alert,
   StatusBar,
 } from 'react-native';
-import React, { useRef, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, {useRef, useEffect} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNSettings from 'react-native-settings';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-const COLORS = { primary: '#1E319D', white: '#FFFFFF' };
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 const SplashScreen = () => {
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -35,22 +35,23 @@ const SplashScreen = () => {
     const loggedIn = await AsyncStorage.getItem('loggedIn');
     const intro = await AsyncStorage.getItem('intro');
 
-    if (intro == 1 && loggedIn == 1) {
-      navigation.navigate('Tab1');
-    } else if (intro != 1 && loggedIn != 1) {
-      navigation.navigate('IntroScreen');
-    } else if (intro == 1 && loggedIn != 1) {
-      navigation.navigate('LoginScreen');
-    } else {
-      navigation.navigate('IntroScreen');
-    }
-  
+    setTimeout(async () => {
+      if (intro == 1 && loggedIn == 1) {
+        navigation.navigate('Tab1');
+      } else if (intro != 1 && loggedIn != 1) {
+        navigation.navigate('IntroScreen');
+      } else if (intro == 1 && loggedIn != 1) {
+        navigation.navigate('LoginScreen');
+      } else {
+        navigation.navigate('IntroScreen');
+      }
+    }, 3000);
   };
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.primary}></StatusBar>
       <Image
-        style={{ width: 90, height: 73 }}
+        style={{width: 90, height: 73}}
         source={require('../assets/img/icon/logoobat.png')}></Image>
       <Text style={styles.splash_title}>PPMO TBC</Text>
     </View>

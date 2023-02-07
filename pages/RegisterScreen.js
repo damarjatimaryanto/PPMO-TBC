@@ -9,30 +9,13 @@ import {
   Animated,
   Alert,
   Dimensions,
-  Modal,
+  TextInput,
+  Button,
 } from 'react-native';
-import React, {useRef, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import RNSettings from 'react-native-settings';
-import {TextInput} from 'react-native-gesture-handler';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import SelectDropdown from 'react-native-select-dropdown';
-import {useState} from 'react';
-
-const countries = [
-  {
-    id: 1,
-    fase: 'Fase Intensif (Ke 1)',
-  },
-  {
-    id: 2,
-    fase: 'Fase Lanjutan ( Ke 2)',
-  },
-];
-const kategori = ['Pasien Baru', 'Pasien Lama'];
+import {useFonts} from 'expo-font';
+import Modal from 'react-native-modal';
 
 const blue = '#0D4AA7';
 const black = '#3d3d3d';
@@ -45,8 +28,30 @@ const COLORS = {primary: '#1E319D', white: '#FFFFFF'};
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
-  const [modal, setModal] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+  // const [fontsLoaded] = useFonts({
+  //   "Poppins-Bold": require("./../assets/fonts/Poppins-Bold.ttf"),
+  //   "Poppins-Regular": require("./../assets/fonts/Poppins-Regular.ttf"),
+  //   "Poppins-SemiBold": require("./../assets/fonts/Poppins-SemiBold.ttf"),
+  //   "Poppins-Medium": require("./../assets/fonts/Poppins-Medium.ttf"),
+  //   "Poppins-LightItalic": require("./../assets/fonts/Poppins-LightItalic.ttf"),
+  // });
+
+  // if (!fontsLoaded) {
+  //   return null;
+  // }
+
+  const [isModalVisible_2, setModalVisible_2] = useState(false);
+
+  const toggleModal_2 = () => {
+    setModalVisible_2(!isModalVisible_2);
+  };
+
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   const [loading, setLoading] = useState(false);
   const [dataKat, setDataKat] = useState([]);
   const [dataFase, setDataFase] = useState([]);
@@ -110,9 +115,17 @@ const RegisterScreen = () => {
   };
 
   const renderItem = ({item}) => (
-    <View style={{width: width - 20}}>
+    <View>
       <TouchableOpacity
-        style={{width: '100%', height: 40}}
+        style={{
+          // width: "100%",
+          height: 40,
+          backgroundColor: 'white',
+          justifyContent: 'center',
+          // alignItems: "center",
+          borderRadius: 10,
+          marginVertical: 4,
+        }}
         onPress={() => {
           setKat(item.id_kategori_detail);
           setKatLabel(item.kategori);
@@ -124,30 +137,45 @@ const RegisterScreen = () => {
             fontFamily: 'Poppins-Regular',
             fontSize: 16,
             color: 'black',
-            paddingLeft: 20,
+            paddingLeft: 70,
             paddingVertical: 8,
+            borderColor: 'grey',
+            borderWidth: 1,
+            borderRadius: 10,
           }}>
           {item.kategori}
         </Text>
       </TouchableOpacity>
     </View>
   );
+
   const renderFase = ({item}) => (
-    <View style={{width: width - 20}}>
+    <View>
       <TouchableOpacity
-        style={{width: '100%', height: 40}}
+        style={{
+          // width: "100%",
+          height: 40,
+          backgroundColor: 'white',
+          justifyContent: 'center',
+          // alignItems: "center",
+          borderRadius: 10,
+          marginVertical: 4,
+        }}
         onPress={() => {
           setFase(item.id_fase_detail);
           setFaseLabel(item.fase);
-          setModal(false);
+          setModalVisible_2(false);
         }}>
         <Text
           style={{
             fontFamily: 'Poppins-Regular',
             fontSize: 16,
             color: 'black',
-            paddingLeft: 20,
+            paddingLeft: 70,
             paddingVertical: 8,
+            borderColor: 'grey',
+            borderWidth: 1,
+            borderRadius: 10,
           }}>
           {item.fase}
         </Text>
@@ -158,105 +186,48 @@ const RegisterScreen = () => {
   return (
     <View style={styles.container}>
       {/* Modal Kategori Pasien */}
-
       <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{width: '95%', justifyContent: 'center'}}>
-                <FlatList
-                  data={dataKat}
-                  renderItem={renderItem}
-                  keyExtractor={item => item.id_kategori_detail}
-                />
-              </View>
-              <View
-                style={{
-                  width: '5%',
-                  // backgroundColor: 'blue',
-                  alignItems: 'center',
-                }}>
-                <TouchableOpacity
-                  style={{paddingTop: 5, paddingRight: 5}}
-                  onPress={() => {
-                    setModalVisible(false);
-                  }}>
-                  <Image
-                    style={{width: 15, height: 15}}
-                    source={require('./../assets/img/icon/delete2.png')}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
+        isVisible={isModalVisible}
+        onBackdropPress={() => setModalVisible(false)}
+        animationOutTiming={1000}
+        animationInTiming={1000}>
+        <View style={{alignItems: 'center'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              // backgroundColor: "white",
+              width: width * 0.6,
+              borderRadius: 10,
+            }}>
+            <FlatList
+              data={dataKat}
+              renderItem={renderItem}
+              keyExtractor={item => item.id_kategori_detail}
+            />
           </View>
         </View>
       </Modal>
 
-      {/* Modal Fase Kesehatan */}
+      {/* Modal FASE PENGOBATAN */}
       <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modal}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModal(!modal);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{width: '95%', justifyContent: 'center'}}>
-                <FlatList
-                  data={dataFase}
-                  renderItem={renderFase}
-                  keyExtractor={item => item.id_fase_detail}
-                />
-              </View>
-              <View
-                style={{
-                  width: '5%',
-                  // backgroundColor: 'blue',
-                  alignItems: 'center',
-                }}>
-                <TouchableOpacity
-                  style={{paddingTop: 5, paddingRight: 5}}
-                  onPress={() => {
-                    setModal(false);
-                  }}>
-                  <Image
-                    style={{width: 15, height: 15}}
-                    source={require('./../assets/img/icon/delete2.png')}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
+        isVisible={isModalVisible_2}
+        onBackdropPress={() => setModalVisible_2(false)}
+        animationOutTiming={1000}
+        animationInTiming={1000}>
+        <View style={{alignItems: 'center'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              // backgroundColor: "white",
+              width: width * 0.6,
+              borderRadius: 10,
+            }}>
+            <FlatList
+              data={dataFase}
+              renderItem={renderFase}
+              keyExtractor={item => item.id_fase_detail}
+            />
           </View>
-        </View>
-      </Modal>
-
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={loading}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModal(!modal);
-        }}>
-        <View
-          style={{
-            position: 'absolute',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-            width: '100%',
-          }}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
         </View>
       </Modal>
 
@@ -273,133 +244,134 @@ const RegisterScreen = () => {
 
       <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Nama Lengkap :</Text>
-
-          <TextInput
-            style={styles.input}
-            placeholderTextColor={grey}
-            onChangeText={setNama}
-            value={nama}
-            placeholder="Masukkan Nama Lengkap Anda"></TextInput>
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Username :</Text>
-
-          <TextInput
-            style={styles.input}
-            placeholderTextColor={grey}
-            onChangeText={setUsername}
-            value={username}
-            placeholder="Masukkan Username"></TextInput>
+          {/* <Text style={styles.h2}>Username :</Text> */}
+          <View style={{width: '15%', alignItems: 'center'}}>
+            <Image
+              style={{width: 24, height: 24}}
+              source={require('./../assets/img/icon/person_fill.png')}
+            />
+          </View>
+          <View style={{width: '85%'}}>
+            <TextInput
+              style={styles.input}
+              placeholderTextColor={black}
+              onChangeText={setNama}
+              value={nama}
+              placeholder="Nama Lengkap"
+            />
+          </View>
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Password :</Text>
-
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            placeholderTextColor={grey}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Masukkan Password"></TextInput>
+          {/* <Text style={styles.h2}>Username :</Text> */}
+          <View style={{width: '15%', alignItems: 'center'}}>
+            <Image
+              style={{width: 24, height: 24}}
+              source={require('./../assets/img/icon/person_fill.png')}
+            />
+          </View>
+          <View style={{width: '85%'}}>
+            <TextInput
+              style={styles.input}
+              placeholderTextColor={black}
+              onChangeText={setUsername}
+              value={username}
+              placeholder="Username"
+            />
+          </View>
         </View>
+
         <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Kategori Pasien :</Text>
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            style={[styles.input, {alignItems: 'flex-start'}]}>
-            {kat == null && (
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: 'grey',
-                  fontFamily: 'Poppins-Regular',
-                }}>
-                Pilih Kategori Pasien
-              </Text>
-            )}
-            {kat != null && (
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: 'grey',
-                  fontFamily: 'Poppins-Regular',
-                }}>
-                {katLabel}
-              </Text>
-            )}
-          </TouchableOpacity>
+          {/* <Text style={styles.h2}>Username :</Text> */}
+          <View style={{width: '15%', alignItems: 'center'}}>
+            <Image
+              style={{width: 24, height: 24}}
+              source={require('./../assets/img/icon/lock.png')}
+            />
+          </View>
+          <View style={{width: '85%'}}>
+            <TextInput
+              style={styles.input}
+              placeholderTextColor={black}
+              onChangeText={setPassword}
+              value={password}
+              placeholder="Password"
+            />
+          </View>
         </View>
 
-        {kat == 2 && (
-          <View style={styles.inputContainer}>
-            <Text style={styles.h2}>Fase Pengobatan :</Text>
-            <TouchableOpacity
-              onPress={() => setModal(true)}
-              style={[styles.input, {alignItems: 'flex-start'}]}>
-              {fase == null && (
+        <View style={styles.inputContainer}>
+          {/* <Text style={styles.h2}>Username :</Text> */}
+          <View style={{width: '15%', alignItems: 'center'}}>
+            <Image
+              style={{width: 24, height: 24}}
+              source={require('./../assets/img/icon/kategori_fill.png')}
+            />
+          </View>
+          <View style={{width: '85%'}}>
+            <TouchableOpacity onPress={toggleModal} style={[styles.input]}>
+              {kat == null && (
                 <Text
                   style={{
                     fontSize: 16,
-                    color: 'grey',
+                    color: 'black',
                     fontFamily: 'Poppins-Regular',
+                    alignItems: 'center',
                   }}>
-                  Pilih Fase Pengobatan
+                  Pilih Kategori Pasien
                 </Text>
               )}
-              {fase != null && (
+              {kat != null && (
                 <Text
                   style={{
                     fontSize: 16,
-                    color: 'grey',
+                    color: 'black',
                     fontFamily: 'Poppins-Regular',
                   }}>
-                  {faseLabel}
+                  {katLabel}
                 </Text>
               )}
             </TouchableOpacity>
           </View>
-        )}
+        </View>
 
-        {/* <View style={styles.inputContainer}>
-          <Text style={styles.h2}>Kategori Pasien :</Text>
-          <SelectDropdown
-            data={kategori}
-            onSelect={(selectedItem, index) => {
-              console.log(selectedItem, index);
-            }}
-            defaultButtonText={'Pilih Kategori Pasien'}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              // text represented after item is selected
-              // if data array is an array of objects then return selectedItem.property to render after item is selected
-              return selectedItem;
-            }}
-            rowTextForSelection={(item, index) => {
-              // text represented for each item in dropdown
-              // if data array is an array of objects then return item.property to represent item in dropdown
-              return item;
-            }}
-            renderDropdownIcon={isOpened => {
-              return (
-                <Image
-                  style={{width: 20, height: 10}}
-                  source={
-                    isOpened
-                      ? require('./../assets/img/icon/down.png')
-                      : require('./../assets/img/icon/up.png')
-                  }
-                />
-              );
-            }}
-            dropdownIconPosition={'right'}
-            buttonStyle={styles.inputselect}
-            buttonTextStyle={styles.inputTextselect}
-            dropdownStyle={styles.dropdownStyle}
-            rowStyle={styles.rowstyle}
-            rowTextStyle={styles.rowtext}
-          />
-        </View> */}
+        {kat == 2 && (
+          <View style={styles.inputContainer}>
+            {/* <Text style={styles.h2}>Fase Pengobatan :</Text> */}
+            <View style={{width: '15%', alignItems: 'center'}}>
+              <Image
+                style={{width: 24, height: 24}}
+                source={require('./../assets/img/icon/fase_fill.png')}
+              />
+            </View>
+            <View style={{width: '85%'}}>
+              <TouchableOpacity
+                onPress={toggleModal_2}
+                style={[styles.input, {alignItems: 'flex-start'}]}>
+                {fase == null && (
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: 'black',
+                      fontFamily: 'Poppins-Regular',
+                    }}>
+                    Pilih Fase Pengobatan
+                  </Text>
+                )}
+                {fase != null && (
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: 'black',
+                      fontFamily: 'Poppins-Regular',
+                    }}>
+                    {faseLabel}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
 
         <View style={styles.btn_Container}>
           <TouchableOpacity
@@ -407,7 +379,13 @@ const RegisterScreen = () => {
             onPress={() => {
               onSubmit();
             }}>
-            <Text style={styles.btnText}>Buat Akun</Text>
+            <Text style={styles.btnText}>Daftar</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.inputContainer_2}>
+          <Text style={styles.kamu_nanya}>Sudah punya akun ? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
+            <Text style={styles.kamu_nanya_2}>Masuk</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -421,23 +399,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    // opacity: modalVisible = true ? 0.5 : 1,
   },
 
   imgContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: '10%',
+    paddingTop: '40%',
   },
   formContainer: {
-    paddingHorizontal: width * 0.055,
+    paddingHorizontal: width * 0.095,
     paddingVertical: 10,
   },
   inputContainer: {
-    marginVertical: 5,
+    marginVertical: 10,
+    flexDirection: 'row',
+    // justifyContent: "center",
+    alignItems: 'center',
+    backgroundColor: '#D4D4D4',
+    borderRadius: 10,
   },
   btn_Container: {
-    marginVertical: 15,
+    marginVertical: 35,
   },
   h1: {
     fontSize: 16,
@@ -447,32 +429,32 @@ const styles = StyleSheet.create({
   },
   h2: {
     fontSize: 16,
-    color: 'grey',
+    color: 'black',
     fontFamily: 'Poppins-SemiBold',
   },
   input: {
-    borderWidth: 2,
-    borderColor: COLORS.primary,
-    paddingVertical: width * 0.013,
-    paddingHorizontal: width * 0.04,
+    // borderWidth: 2,
+    // borderColor: COLORS.primary,
+    // paddingVertical: width * 0.013,
+    // paddingHorizontal: width * 0.04,
     height: 50,
-    borderRadius: 5,
-    color: 'grey',
-    backgroundColor: 'white',
+    borderRadius: 10,
+    color: 'black',
+    paddingTop: 6,
+    // backgroundColor: "#D4D4D4",
     fontSize: 16,
     fontFamily: 'Poppins-Regular',
-    alignItems: 'center',
     justifyContent: 'center',
 
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 2,
-      height: 5,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    // shadowColor: "#000000",
+    // shadowOffset: {
+    //   width: 2,
+    //   height: 5,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
 
-    elevation: 9,
+    // elevation: 9,
   },
   inputselect: {
     borderWidth: 2,
@@ -507,9 +489,10 @@ const styles = StyleSheet.create({
   submitBtn: {
     backgroundColor: COLORS.primary,
     paddingVertical: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    height: 50,
   },
   btnText: {
     fontSize: width * 0.035,
@@ -564,5 +547,25 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+  inputContainer_2: {
+    marginVertical: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  kamu_nanya: {
+    fontSize: 16,
+    color: 'black',
+    fontFamily: 'Poppins-Regular',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  kamu_nanya_2: {
+    fontSize: 16,
+    color: COLORS.primary,
+    fontFamily: 'Poppins-SemiBold',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
